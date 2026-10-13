@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'> & { as?: 'div' | 'article' | 'li' | 'a'; href?: string; interactive?: boolean };
+
+const { as: Tag = 'div', class: className, interactive = false, ...rest } = Astro.props;
+---
+
+<Tag
+  class:list={[
+    'rounded-2xl border border-border bg-card shadow-soft',
+    interactive && 'transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated',
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</Tag>

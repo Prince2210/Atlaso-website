@@ -1,0 +1,36 @@
+---
+import { Check } from '@lucide/astro';
+import SectionHeader from '../ui/SectionHeader.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  bullets?: string[];
+  reverse?: boolean;
+  id?: string;
+}
+
+const { eyebrow, title, description, bullets = [], reverse = false, id } = Astro.props;
+---
+
+<div id={id} class="grid scroll-mt-24 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+  <div class:list={[reverse && 'lg:order-2']}>
+    <SectionHeader align="left" eyebrow={eyebrow} title={title} description={description} />
+    {
+      bullets.length > 0 && (
+        <ul class="mt-8 grid gap-3 sm:grid-cols-2">
+          {bullets.map((b) => (
+            <li class="flex items-start gap-2.5 text-[0.95rem] text-foreground">
+              <Check class="mt-0.5 size-4.5 shrink-0 text-primary" />
+              {b}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+  <div class:list={['min-w-0', reverse && 'lg:order-1']}>
+    <slot />
+  </div>
+</div>

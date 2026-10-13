@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-grid size-10 shrink-0 place-items-center rounded-xl border border-primary/15 bg-primary-soft text-primary-soft-foreground [&>svg]:size-5',
+    className,
+  ]}
+>
+  <slot />
+</span>

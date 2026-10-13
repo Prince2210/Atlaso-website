@@ -1,0 +1,441 @@
+---
+import {
+  ArrowRight,
+  BellRing,
+  Check,
+  ChevronRight,
+  CloudUpload,
+  KeyRound,
+  Lock,
+  MessageSquareText,
+  ScanSearch,
+  ServerCog,
+  ShieldCheck,
+  Sparkles,
+  Workflow,
+} from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import SectionHeader from '../components/ui/SectionHeader.astro';
+import IconBadge from '../components/ui/IconBadge.astro';
+import CodeTabs from '../components/ui/CodeTabs.astro';
+import ProductMockup from '../components/visuals/ProductMockup.astro';
+import SatelliteScene from '../components/visuals/SatelliteScene.astro';
+import BeforeAfter from '../components/visuals/BeforeAfter.astro';
+import LogoCloud from '../components/sections/LogoCloud.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import { product, site } from '../config/site';
+import { solutions } from '../data/solutions';
+import { quickstartSamples } from '../data/code';
+
+const steps = [
+  {
+    icon: CloudUpload,
+    title: 'Connect your area and data',
+    description:
+      'Draw an area of interest or upload boundaries. We source analysis-ready imagery from 20+ optical, radar and aerial providers — or bring your own.',
+  },
+  {
+    icon: ScanSearch,
+    title: 'Run AI in a few clicks',
+    description:
+      'Apply pre-trained models for buildings, vessels, crops and more, or fine-tune your own with a few dozen labels. Results are versioned and auditable.',
+  },
+  {
+    icon: Workflow,
+    title: 'Act on what changes',
+    description:
+      'Get alerts when something changes, explore results on the map, ask questions in plain language and push insights into your existing tools.',
+  },
+];
+
+const landCover = [
+  { label: 'Built-up', color: 'bg-slate-400' },
+  { label: 'Cropland', color: 'bg-amber-400' },
+  { label: 'Tree cover', color: 'bg-emerald-600' },
+  { label: 'Grassland', color: 'bg-lime-400' },
+  { label: 'Water', color: 'bg-sky-500' },
+  { label: 'Bare', color: 'bg-stone-400' },
+];
+// 12 × 5 land-cover "classification" preview.
+const coverGrid = 'WWWBBBCCCTTTWWBBBBCCCTTTWWBBBCCGGTTTWBBSSCCGGGTTWBBSSCGGGTTT';
+const coverColor: Record<string, string> = {
+  W: 'bg-sky-500',
+  B: 'bg-slate-400',
+  C: 'bg-amber-400',
+  T: 'bg-emerald-600',
+  G: 'bg-lime-400',
+  S: 'bg-stone-400',
+};
+
+const alerts = [
+  { tone: 'bg-rose-500', title: 'New construction · Site 14', meta: '2.1 ha · 12 min ago' },
+  { tone: 'bg-amber-500', title: 'Vegetation encroachment · Span 882', meta: '0.8 m clearance · 1 h ago' },
+  { tone: 'bg-sky-500', title: 'Flooding detected · Parcel 2031', meta: 'SAR · 3 h ago' },
+];
+
+const sensors = ['Optical 30 cm–10 m', 'SAR (all-weather)', 'Aerial', 'Drone', 'Elevation', 'Multispectral', 'Your own imagery'];
+
+const stats = [
+  { value: '4.2B', unit: 'km²', label: 'of imagery analyzed' },
+  { value: '97', unit: '%', label: 'median detection precision' },
+  { value: '< 6', unit: 'hrs', label: 'from capture to insight' },
+  { value: '40', unit: '+', label: 'production-ready models' },
+];
+
+const devPoints = [
+  'REST API and typed SDKs for Python and TypeScript',
+  'STAC-native catalog, OGC tiles and webhooks',
+  'Export to GeoJSON, GeoParquet and Cloud-Optimized GeoTIFF',
+];
+
+const trust = [
+  { icon: ShieldCheck, title: 'SOC 2 Type II', description: 'Independently audited controls' },
+  { icon: Lock, title: 'Encrypted everywhere', description: 'TLS 1.3 in transit, AES-256 at rest' },
+  { icon: KeyRound, title: 'SSO & granular roles', description: 'SAML, SCIM and audit logs' },
+  { icon: ServerCog, title: 'Deploy your way', description: 'Cloud, private VPC or on-premises' },
+];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="relative isolate overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-grid mask-fade-top" aria-hidden="true"></div>
+    <div class="absolute -top-48 left-1/2 -z-10 h-[32rem] w-[64rem] -translate-x-1/2 glow" aria-hidden="true"></div>
+
+    <div class="container-page pt-14 pb-20 sm:pt-20 lg:pt-24">
+      <div class="mx-auto max-w-4xl text-center">
+        <a
+          href="/blog/introducing-lens-2"
+          class="group inline-flex items-center gap-2 rounded-full border border-border bg-background/70 py-1 pr-3 pl-1 text-sm text-muted-foreground shadow-soft backdrop-blur transition-colors hover:text-foreground"
+        >
+          <span class="rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold text-primary-soft-foreground">New</span>
+          <span><span class="hidden sm:inline">{product.name} {product.version}: </span>ask your map anything</span>
+          <ChevronRight class="size-4 transition-transform group-hover:translate-x-0.5" />
+        </a>
+
+        <h1 class="mt-8 text-[2.6rem] leading-[1.05] font-semibold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+          Geospatial AI that turns imagery into <span class="text-gradient">answers</span>
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+          {product.name} detects objects, monitors change and answers questions across satellite, aerial and drone imagery
+          — so your team acts on what’s happening on the ground today.
+        </p>
+
+        <div class="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+          <Button href="/demo" size="lg">
+            Book a demo
+            <ArrowRight class="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+          </Button>
+          <Button href="/product" size="lg" variant="outline">Explore the platform</Button>
+        </div>
+
+        <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          {
+            ['No GIS expertise required', 'Results in hours, not weeks', '14-day pilot on your data'].map((t) => (
+              <li class="flex items-center gap-1.5">
+                <Check class="size-4 text-primary" />
+                {t}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="relative mx-auto mt-16 max-w-6xl sm:mt-20">
+        <div class="absolute -inset-x-10 -top-10 -bottom-10 -z-10 rounded-[3rem] glow opacity-70" aria-hidden="true"></div>
+        <ProductMockup />
+      </div>
+
+      <LogoCloud class="mx-auto mt-20 max-w-5xl" />
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="border-t border-border bg-muted/40 py-20 sm:py-28">
+    <div class="container-page">
+      <SectionHeader
+        eyebrow="How it works"
+        title="From pixels to decisions in three steps"
+        description="No data engineering, no model training pipelines, no waiting on a specialist team. Just answers you can trust."
+      />
+      <ol class="relative mt-16 grid gap-6 md:grid-cols-3">
+        {
+          steps.map((step, i) => (
+            <li class="relative rounded-2xl border border-border bg-card p-7 shadow-soft">
+              <div class="flex items-center justify-between">
+                <IconBadge>
+                  <step.icon />
+                </IconBadge>
+                <span class="font-mono text-sm text-muted-foreground/70">0{i + 1}</span>
+              </div>
+              <h3 class="mt-6 text-lg font-semibold text-foreground">{step.title}</h3>
+              <p class="mt-2 leading-relaxed text-muted-foreground">{step.description}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Capabilities bento -->
+  <section class="py-20 sm:py-28" id="capabilities">
+    <div class="container-page">
+      <SectionHeader
+        eyebrow="Platform"
+        title="Everything you need to understand the planet"
+        description={`One workspace and one API for detection, segmentation, change monitoring and natural-language analysis — built on ${site.name}’s geospatial foundation model.`}
+      />
+
+      <div class="mt-16 grid gap-5 lg:grid-cols-3">
+        <!-- Detection -->
+        <article class="group overflow-hidden rounded-2xl border border-border bg-card shadow-soft lg:col-span-2">
+          <div class="grid h-full sm:grid-cols-2">
+            <div class="flex flex-col p-7">
+              <IconBadge><ScanSearch /></IconBadge>
+              <h3 class="mt-6 text-lg font-semibold text-foreground">Detect anything, anywhere</h3>
+              <p class="mt-2 leading-relaxed text-muted-foreground">
+                40+ pre-trained models find buildings, vessels, vehicles, solar panels, crops and more — or train a custom
+                detector from a few dozen examples.
+              </p>
+              <a href="/product#models" class="mt-auto inline-flex items-center gap-1 pt-6 text-sm font-medium text-primary hover:underline">
+                Browse the model catalog <ArrowRight class="size-4" />
+              </a>
+            </div>
+            <div class="relative min-h-60 border-t border-border sm:border-t-0 sm:border-l">
+              <SatelliteScene uid="bento-port" overlays viewBox="560 70 240 190" class="absolute inset-0 size-full" />
+            </div>
+          </div>
+        </article>
+
+        <!-- Ask -->
+        <article class="flex flex-col rounded-2xl border border-border bg-card p-7 shadow-soft">
+          <IconBadge><MessageSquareText /></IconBadge>
+          <h3 class="mt-6 text-lg font-semibold text-foreground">Ask in plain language</h3>
+          <p class="mt-2 leading-relaxed text-muted-foreground">
+            Query imagery like a colleague. Every answer links back to the evidence.
+          </p>
+          <div class="mt-6 space-y-2.5 rounded-xl border border-border bg-muted/60 p-4 text-sm" aria-hidden="true">
+            <p class="ml-auto w-fit max-w-[90%] rounded-lg rounded-br-sm bg-foreground px-3 py-2 text-background">
+              Which substations have solar farms built within 5 km since 2024?
+            </p>
+            <p class="w-fit max-w-[95%] rounded-lg rounded-bl-sm border border-border bg-card px-3 py-2 text-foreground">
+              <Sparkles class="mr-1 inline size-3.5 text-primary" />
+              <strong class="font-semibold">7 substations</strong> — 42.6 ha of new panels. Showing on map.
+            </p>
+          </div>
+        </article>
+
+        <!-- Land cover -->
+        <article class="flex flex-col rounded-2xl border border-border bg-card p-7 shadow-soft">
+          <h3 class="text-lg font-semibold text-foreground">Land cover & segmentation</h3>
+          <p class="mt-2 leading-relaxed text-muted-foreground">Pixel-accurate maps of 12 land-cover classes, refreshed every revisit.</p>
+          <div class="mt-6 grid grid-cols-12 gap-0.5 overflow-hidden rounded-lg" aria-hidden="true">
+            {coverGrid.split('').map((c) => <span class:list={['aspect-square', coverColor[c]]} />)}
+          </div>
+          <ul class="mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+            {
+              landCover.map((l) => (
+                <li class="flex items-center gap-1.5">
+                  <span class:list={['size-2 rounded-sm', l.color]} />
+                  {l.label}
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <!-- Alerts -->
+        <article class="flex flex-col rounded-2xl border border-border bg-card p-7 shadow-soft">
+          <IconBadge><BellRing /></IconBadge>
+          <h3 class="mt-6 text-lg font-semibold text-foreground">Monitoring & alerts</h3>
+          <p class="mt-2 leading-relaxed text-muted-foreground">Continuous monitoring that only pings you when something real changes.</p>
+          <ul class="mt-6 space-y-2" aria-hidden="true">
+            {
+              alerts.map((a) => (
+                <li class="flex items-center gap-3 rounded-lg border border-border bg-background px-3 py-2.5">
+                  <span class:list={['size-2 shrink-0 rounded-full', a.tone]} />
+                  <span class="min-w-0">
+                    <span class="block truncate text-[0.8rem] font-medium text-foreground">{a.title}</span>
+                    <span class="block text-xs text-muted-foreground">{a.meta}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <!-- Sensors -->
+        <article class="flex flex-col rounded-2xl border border-border bg-card p-7 shadow-soft">
+          <h3 class="text-lg font-semibold text-foreground">Any sensor, fused</h3>
+          <p class="mt-2 leading-relaxed text-muted-foreground">
+            Optical when it’s clear, radar when it’s not. We harmonize sources into one analysis-ready time series.
+          </p>
+          <ul class="mt-6 flex flex-wrap gap-2">
+            {
+              sensors.map((s) => (
+                <li class="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground">{s}</li>
+              ))
+            }
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Change detection showcase -->
+  <section class="border-y border-border bg-muted/40 py-20 sm:py-28">
+    <div class="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
+      <div>
+        <SectionHeader
+          align="left"
+          eyebrow="Change detection"
+          title="Know what changed — and ignore what didn’t"
+          description="Our change engine compares every new capture against a learned baseline, filtering out clouds, shadows, seasons and sensor differences so you only see meaningful change."
+        />
+        <ul class="mt-8 space-y-4">
+          {
+            [
+              ['Construction & demolition', 'Track new structures, roads and earthworks at building level.'],
+              ['Land conversion', 'Spot deforestation, mining and agricultural expansion early.'],
+              ['Damage assessment', 'Classify per-building damage after floods, fires and storms.'],
+            ].map(([t, d]) => (
+              <li class="flex gap-3">
+                <span class="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-primary-soft text-primary-soft-foreground">
+                  <Check class="size-3.5" />
+                </span>
+                <span>
+                  <span class="font-medium text-foreground">{t}.</span> <span class="text-muted-foreground">{d}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <BeforeAfter uid="home-ba" />
+        <p class="mt-3 text-center text-sm text-muted-foreground">Drag to compare · March 2025 vs. September 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solutions -->
+  <section class="py-20 sm:py-28">
+    <div class="container-page">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <SectionHeader
+          align="left"
+          eyebrow="Solutions"
+          title="Built for the industries that run on location"
+          description="Pre-configured workflows, models and reports for the questions your team asks most."
+        />
+        <Button href="/solutions" variant="outline" class="self-start md:self-auto">
+          All solutions <ArrowRight class="size-4" />
+        </Button>
+      </div>
+      <ul class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          solutions.map((s) => (
+            <li>
+              <a
+                href={`/solutions/${s.slug}`}
+                class="group flex h-full flex-col rounded-2xl border border-border bg-card p-7 shadow-soft transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated"
+              >
+                <IconBadge>
+                  <s.icon />
+                </IconBadge>
+                <h3 class="mt-6 text-lg font-semibold text-foreground">{s.name}</h3>
+                <p class="mt-2 flex-1 leading-relaxed text-muted-foreground">{s.summary}</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                  Learn more <ArrowRight class="size-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="border-y border-border">
+    <div class="container-page">
+      <dl class="grid grid-cols-2 divide-border lg:grid-cols-4 lg:divide-x">
+        {
+          stats.map((s, i) => (
+            <div class:list={['px-2 py-10 text-center sm:py-14', i < 2 && 'border-b border-border lg:border-b-0']}>
+              <dt class="sr-only">{s.label}</dt>
+              <dd>
+                <span class="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+                  {s.value}
+                  <span class="text-primary">{s.unit}</span>
+                </span>
+                <span class="mt-2 block text-sm text-muted-foreground">{s.label}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Developers -->
+  <section class="py-20 sm:py-28">
+    <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeader
+          align="left"
+          eyebrow="For developers"
+          title="Planet-scale analysis, one API call away"
+          description={`Everything in the ${product.shortName} workspace is available through a clean, well-documented API — so you can embed geospatial AI into your own products and pipelines.`}
+        />
+        <ul class="mt-8 space-y-3">
+          {
+            devPoints.map((p) => (
+              <li class="flex items-start gap-3 text-foreground">
+                <Check class="mt-0.5 size-5 shrink-0 text-primary" />
+                {p}
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+          <Button href="/developers">Explore the API <ArrowRight class="size-4" /></Button>
+          <Button href="/contact?topic=api" variant="outline">Request API access</Button>
+        </div>
+      </div>
+      <CodeTabs samples={quickstartSamples} />
+    </div>
+  </section>
+
+  <Testimonials />
+
+  <!-- Trust -->
+  <section class="border-t border-border bg-muted/40 py-16 sm:py-20">
+    <div class="container-page">
+      <div class="flex flex-col justify-between gap-10 lg:flex-row lg:items-center">
+        <div class="max-w-md">
+          <h2 class="text-2xl font-semibold text-foreground sm:text-3xl">Enterprise-grade from day one</h2>
+          <p class="mt-3 text-muted-foreground">
+            Your areas of interest and results are sensitive. We treat them that way.{' '}
+            <a href="/security" class="font-medium text-primary hover:underline">Visit the trust center</a>.
+          </p>
+        </div>
+        <ul class="grid flex-1 gap-6 sm:grid-cols-2 lg:max-w-3xl lg:grid-cols-4">
+          {
+            trust.map((t) => (
+              <li>
+                <t.icon class="size-6 text-primary" />
+                <p class="mt-3 font-medium text-foreground">{t.title}</p>
+                <p class="mt-1 text-sm text-muted-foreground">{t.description}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>

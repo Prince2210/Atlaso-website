@@ -1,0 +1,52 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  primary?: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const {
+  title = 'See your area of interest through a new lens',
+  description = 'Book a 30-minute walkthrough on your own geography. We’ll run live detections and show what’s changed — no GIS expertise required.',
+  primary = { label: 'Book a demo', href: '/demo' },
+  secondary = { label: 'Talk to sales', href: '/contact' },
+} = Astro.props;
+---
+
+<section class="py-20 sm:py-24">
+  <div class="container-page">
+    <div
+      class="relative isolate overflow-hidden rounded-3xl bg-slate-950 px-6 py-16 text-center shadow-elevated sm:px-12 sm:py-20"
+    >
+      <svg class="absolute inset-0 -z-10 size-full opacity-[0.18]" aria-hidden="true">
+        <defs>
+          <pattern id="cta-contours" width="160" height="160" patternUnits="userSpaceOnUse">
+            <path d="M0 80 C 40 40 120 120 160 80" fill="none" stroke="#5eead4" stroke-width="1"></path>
+            <path d="M0 110 C 40 70 120 150 160 110" fill="none" stroke="#5eead4" stroke-width="1"></path>
+            <path d="M0 50 C 40 10 120 90 160 50" fill="none" stroke="#5eead4" stroke-width="1"></path>
+            <path d="M0 20 C 40 -20 120 60 160 20" fill="none" stroke="#5eead4" stroke-width="1"></path>
+            <path d="M0 140 C 40 100 120 180 160 140" fill="none" stroke="#5eead4" stroke-width="1"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#cta-contours)"></rect>
+      </svg>
+      <div class="absolute -top-24 left-1/2 -z-10 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-teal-500/30 blur-3xl" aria-hidden="true"></div>
+
+      <h2 class="mx-auto max-w-2xl text-3xl font-semibold text-white sm:text-4xl">{title}</h2>
+      <p class="mx-auto mt-5 max-w-xl text-base text-slate-300 sm:text-lg">{description}</p>
+      <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+        <Button href={primary.href} size="lg" class="bg-teal-400 text-slate-950 hover:bg-teal-300">
+          {primary.label}
+          <ArrowRight class="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+        </Button>
+        <Button href={secondary.href} size="lg" variant="ghost" class="text-white ring-1 ring-white/20 hover:bg-white/10">
+          {secondary.label}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>

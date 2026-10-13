@@ -1,0 +1,249 @@
+---
+import { ArrowRight, ChevronDown, Menu, X } from '@lucide/astro';
+import Logo from '../ui/Logo.astro';
+import Button from '../ui/Button.astro';
+import ThemeMenu from '../ui/ThemeMenu.astro';
+import ThemeSwitcher from '../ui/ThemeSwitcher.astro';
+import { product, site } from '../../config/site';
+import { mainNav } from '../../config/navigation';
+import { solutions } from '../../data/solutions';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug}`))?.icon;
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-transparent bg-background/75 backdrop-blur-xl transition-colors duration-200 data-scrolled:border-border data-scrolled:bg-background/85"
+>
+  <div class="container-page flex h-16 items-center gap-4">
+    <a href="/" class="-m-1 rounded-lg p-1" aria-label={`${site.name} home`}>
+      <Logo />
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav aria-label="Main" class="ml-6 hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          mainNav.map((item) =>
+            'href' in item ? (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  class="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ) : (
+              <li class="group relative" data-dropdown>
+                <button
+                  type="button"
+                  data-dropdown-trigger
+                  aria-expanded="false"
+                  class:list={[
+                    'flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-foreground group-data-open:text-foreground',
+                    item.children.some((c) => isActive(c.href)) ? 'text-foreground' : 'text-muted-foreground',
+                  ]}
+                >
+                  {item.label}
+                  <ChevronDown class="size-3.5 opacity-70 transition-transform duration-200 group-hover:rotate-180 group-data-open:rotate-180" />
+                </button>
+                <div
+                  data-dropdown-panel
+                  class="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-data-open:visible group-data-open:translate-y-0 group-data-open:opacity-100"
+                >
+                  {item.label === 'Solutions' ? (
+                    <div class="w-[40rem] rounded-2xl border border-border bg-card p-2 shadow-elevated">
+                      <ul class="grid grid-cols-2 gap-1">
+                        {item.children.map((child) => {
+                          const Icon = iconFor(child.href);
+                          return (
+                            <li>
+                              <a
+                                href={child.href}
+                                class="flex gap-3 rounded-xl p-3 transition-colors hover:bg-muted"
+                              >
+                                <span class="grid size-9 shrink-0 place-items-center rounded-lg border border-border bg-background text-primary">
+                                  {Icon && <Icon class="size-[18px]" />}
+                                </span>
+                                <span>
+                                  <span class="block text-sm font-medium text-foreground">{child.label}</span>
+                                  <span class="mt-0.5 line-clamp-2 block text-[0.8rem] leading-snug text-muted-foreground">
+                                    {child.description}
+                                  </span>
+                                </span>
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                      <a
+                        href="/solutions"
+                        class="mt-1 flex items-center justify-between rounded-xl bg-muted px-4 py-3 text-sm font-medium text-foreground transition-colors hover:text-primary"
+                      >
+                        <span>
+                          Explore all solutions
+                          <span class="ml-2 font-normal text-muted-foreground">See how teams in every industry use {product.shortName}</span>
+                        </span>
+                        <ArrowRight class="size-4" />
+                      </a>
+                    </div>
+                  ) : (
+                    <ul class="w-72 rounded-2xl border border-border bg-card p-2 shadow-elevated">
+                      {item.children.map((child) => (
+                        <li>
+                          <a href={child.href} class="block rounded-xl px-3 py-2.5 transition-colors hover:bg-muted">
+                            <span class="block text-sm font-medium text-foreground">{child.label}</span>
+                            {child.description && (
+                              <span class="mt-0.5 block text-[0.8rem] text-muted-foreground">{child.description}</span>
+                            )}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-1.5 sm:gap-2">
+      <ThemeMenu />
+      <a
+        href={site.appUrl}
+        class="hidden rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground lg:block"
+      >
+        Sign in
+      </a>
+      <div class="hidden sm:block">
+        <Button href="/demo" size="sm">Book a demo</Button>
+      </div>
+      <button
+        type="button"
+        id="mobile-menu-toggle"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+        class="grid size-9 place-items-center rounded-lg text-foreground transition-colors hover:bg-muted lg:hidden"
+      >
+        <Menu class="size-5 [[aria-expanded=true]>&]:hidden" />
+        <X class="hidden size-5 [[aria-expanded=true]>&]:block" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile navigation (sibling of <header>: backdrop-filter would otherwise trap position:fixed) -->
+<div
+    id="mobile-menu"
+    hidden
+    class="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-border bg-background lg:hidden"
+  >
+    <nav aria-label="Mobile" class="container-page flex min-h-full flex-col py-4">
+      <ul class="divide-y divide-border">
+        {
+          mainNav.map((item) =>
+            'href' in item ? (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  class="block py-4 text-base font-medium text-foreground aria-[current=page]:text-primary"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ) : (
+              <li>
+                <details class="group/acc">
+                  <summary class="flex cursor-pointer list-none items-center justify-between py-4 text-base font-medium text-foreground [&::-webkit-details-marker]:hidden">
+                    {item.label}
+                    <ChevronDown class="size-4 text-muted-foreground transition-transform group-open/acc:rotate-180" />
+                  </summary>
+                  <ul class="-mt-1 grid gap-0.5 pb-4 sm:grid-cols-2">
+                    {item.label === 'Solutions' && (
+                      <li class="sm:col-span-2">
+                        <a
+                          href="/solutions"
+                          class="flex items-center gap-3 rounded-lg px-2 py-2.5 text-[0.95rem] font-medium text-foreground transition-colors hover:bg-muted"
+                        >
+                          <ArrowRight class="size-4 text-primary" />
+                          All solutions
+                        </a>
+                      </li>
+                    )}
+                    {item.children.map((child) => {
+                      const Icon = iconFor(child.href);
+                      return (
+                        <li>
+                          <a
+                            href={child.href}
+                            aria-current={isActive(child.href) ? 'page' : undefined}
+                            class="flex items-center gap-3 rounded-lg px-2 py-2.5 text-[0.95rem] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground aria-[current=page]:text-primary"
+                          >
+                            {Icon && <Icon class="size-4 text-primary" />}
+                            {child.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </details>
+              </li>
+            ),
+          )
+        }
+      </ul>
+
+      <div class="mt-auto space-y-4 border-t border-border pt-6 pb-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-muted-foreground">Appearance</span>
+          <ThemeSwitcher />
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <Button href={site.appUrl} variant="outline" size="lg">Sign in</Button>
+          <Button href="/demo" size="lg">Book a demo</Button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+<script>
+  import '../../scripts/dropdown';
+
+  const header = document.getElementById('site-header')!;
+  const toggle = document.getElementById('mobile-menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+
+  const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setMenu = (open: boolean) => {
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    document.documentElement.classList.toggle('overflow-hidden', open);
+    header.toggleAttribute('data-scrolled', open || window.scrollY > 8);
+  };
+
+  toggle.addEventListener('click', () => setMenu(menu.hidden));
+  menu.addEventListener('click', (event) => {
+    if ((event.target as Element).closest('a')) setMenu(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !menu.hidden) {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+  window.matchMedia('(min-width: 64rem)').addEventListener('change', (e) => {
+    if (e.matches) setMenu(false);
+  });
+</script>

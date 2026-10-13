@@ -1,0 +1,55 @@
+---
+import { ChevronsLeftRight } from '@lucide/astro';
+import SatelliteScene from './SatelliteScene.astro';
+
+interface Props {
+  class?: string;
+  uid?: string;
+}
+
+const { class: className, uid = 'ba' } = Astro.props;
+const crop = '206 64 360 225';
+---
+
+<div
+  data-before-after
+  class:list={['relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-[#0a2233] shadow-elevated select-none', className]}
+  style="--pos: 50%"
+>
+  <SatelliteScene uid={`${uid}-before`} variant="before" viewBox={crop} class="absolute inset-0 size-full" />
+  <div class="absolute inset-0 [clip-path:inset(0_0_0_var(--pos))]">
+    <SatelliteScene uid={`${uid}-after`} variant="after" overlays viewBox={crop} class="absolute inset-0 size-full" />
+  </div>
+
+  <span class="absolute top-3 left-3 rounded-md bg-slate-950/75 px-2 py-1 font-mono text-[10px] font-medium text-white/85 backdrop-blur">
+    MAR 2025
+  </span>
+  <span class="absolute top-3 right-3 rounded-md bg-slate-950/75 px-2 py-1 font-mono text-[10px] font-medium text-white/85 backdrop-blur">
+    SEP 2026
+  </span>
+
+  <input
+    type="range"
+    min="0"
+    max="100"
+    value="50"
+    aria-label="Compare imagery before and after"
+    class="peer absolute inset-0 size-full cursor-ew-resize opacity-0"
+  />
+
+  <!-- Handle -->
+  <div class="pointer-events-none absolute inset-y-0 left-[var(--pos)] w-0.5 -translate-x-1/2 bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.15)] peer-focus-visible:*:ring-4 peer-focus-visible:*:ring-teal-300/70">
+    <span class="absolute top-1/2 left-1/2 grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-slate-900 shadow-lg">
+      <ChevronsLeftRight class="size-4" />
+    </span>
+  </div>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-before-after]')) {
+    const input = root.querySelector('input')!;
+    const update = () => root.style.setProperty('--pos', `${input.value}%`);
+    input.addEventListener('input', update);
+    update();
+  }
+</script>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    updated: string;
+  };
+}
+
+const { title, description, updated } = Astro.props.frontmatter;
+const updatedLabel = new Date(updated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHero eyebrow="Legal" title={title} description={`Last updated ${updatedLabel}`} />
+  <section class="py-14 sm:py-20">
+    <div class="container-page max-w-3xl">
+      <div class="prose-content">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

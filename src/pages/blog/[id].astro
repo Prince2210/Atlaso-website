@@ -1,0 +1,87 @@
+---
+import { ArrowLeft } from '@lucide/astro';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import PostCover from '../../components/ui/PostCover.astro';
+import { formatDate, getPosts, readingTime, type Post } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post, posts } }));
+}
+
+interface Props {
+  post: Post;
+  posts: Post[];
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const related = posts.filter((p) => p.id !== post.id).slice(0, 2);
+const initials = post.data.author
+  .split(' ')
+  .map((n) => n[0])
+  .join('')
+  .slice(0, 2);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} type="article">
+  <article>
+    <header class="relative isolate overflow-hidden border-b border-border">
+      <div class="absolute inset-0 -z-10 bg-grid mask-fade-top" aria-hidden="true"></div>
+      <div class="container-page max-w-3xl py-14 sm:py-20">
+        <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft class="size-4" /> All posts
+        </a>
+        <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+          <span class="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-semibold text-primary-soft-foreground">{post.data.category}</span>
+          <time datetime={post.data.pubDate.toISOString()} class="text-muted-foreground">{formatDate(post.data.pubDate)}</time>
+          <span class="text-muted-foreground">· {readingTime(post.body)}</span>
+        </p>
+        <h1 class="mt-5 text-3xl leading-tight font-semibold text-foreground sm:text-5xl sm:leading-[1.1]">{post.data.title}</h1>
+        <p class="mt-5 text-lg text-muted-foreground sm:text-xl">{post.data.description}</p>
+        <div class="mt-8 flex items-center gap-3">
+          <span class="grid size-10 place-items-center rounded-full bg-foreground text-sm font-semibold text-background">{initials}</span>
+          <span class="text-sm">
+            <span class="block font-medium text-foreground">{post.data.author}</span>
+            {post.data.authorRole && <span class="text-muted-foreground">{post.data.authorRole}</span>}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-page max-w-4xl pt-10">
+      <PostCover category={post.data.category} seed={post.id} class="aspect-[21/9] rounded-2xl border border-border" />
+    </div>
+
+    <div class="container-page max-w-3xl py-12 sm:py-16">
+      <div class="prose-content">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="border-t border-border bg-muted/40 py-16">
+        <div class="container-page max-w-4xl">
+          <h2 class="text-lg font-semibold text-foreground">Keep reading</h2>
+          <ul class="mt-6 grid gap-6 sm:grid-cols-2">
+            {related.map((p) => (
+              <li>
+                <a href={`/blog/${p.id}`} class="group block h-full rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:border-primary/40">
+                  <p class="text-xs font-semibold text-primary">{p.data.category}</p>
+                  <h3 class="mt-2 font-semibold text-foreground group-hover:text-primary">{p.data.title}</h3>
+                  <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{p.data.description}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <CTASection />
+</BaseLayout>

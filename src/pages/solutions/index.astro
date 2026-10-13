@@ -1,0 +1,72 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Testimonials from '../../components/sections/Testimonials.astro';
+import IconBadge from '../../components/ui/IconBadge.astro';
+import Button from '../../components/ui/Button.astro';
+import { solutions } from '../../data/solutions';
+import { product } from '../../config/site';
+---
+
+<BaseLayout
+  title="Solutions"
+  description={`See how agriculture, insurance, energy, government, climate and logistics teams use ${product.name} to turn imagery into decisions.`}
+>
+  <PageHero
+    eyebrow="Solutions"
+    title="Geospatial AI for every team that runs on location"
+    description="Pre-built workflows, models and reports tuned to the questions your industry asks — ready on day one, customizable as you grow."
+  >
+    <Fragment slot="actions">
+      <Button href="/demo" size="lg">Book a demo <ArrowRight class="size-4" /></Button>
+      <Button href="/contact" size="lg" variant="outline">Talk to an expert</Button>
+    </Fragment>
+  </PageHero>
+
+  <section class="py-20 sm:py-24">
+    <div class="container-page">
+      <ul class="grid gap-6 md:grid-cols-2">
+        {
+          solutions.map((s) => (
+            <li>
+              <a
+                href={`/solutions/${s.slug}`}
+                class="group flex h-full flex-col rounded-2xl border border-border bg-card p-7 shadow-soft transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated sm:p-8"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <IconBadge>
+                    <s.icon />
+                  </IconBadge>
+                  <ArrowRight class="size-5 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary" />
+                </div>
+                <h2 class="mt-6 text-xl font-semibold text-foreground">{s.name}</h2>
+                <p class="mt-2 leading-relaxed text-muted-foreground">{s.summary}</p>
+                <ul class="mt-6 mb-auto flex flex-wrap gap-2">
+                  {s.useCases.map((u) => (
+                    <li class="rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground">{u.title}</li>
+                  ))}
+                </ul>
+                <dl class="mt-8 grid grid-cols-3 gap-4 border-t border-border pt-6">
+                  {s.metrics.map((m) => (
+                    <div>
+                      <dt class="sr-only">{m.label}</dt>
+                      <dd>
+                        <span class="block text-lg font-semibold text-foreground">{m.value}</span>
+                        <span class="mt-0.5 block text-xs leading-snug text-muted-foreground">{m.label}</span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Testimonials />
+  <CTASection />
+</BaseLayout>
