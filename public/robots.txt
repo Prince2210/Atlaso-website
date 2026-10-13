@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atlaso.ai/sitemap-index.xml

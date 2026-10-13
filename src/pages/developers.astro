@@ -1,0 +1,170 @@
+---
+import { ArrowRight, Boxes, Gauge, Globe, KeyRound, Layers, Terminal, Webhook, Workflow } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import Button from '../components/ui/Button.astro';
+import SectionHeader from '../components/ui/SectionHeader.astro';
+import IconBadge from '../components/ui/IconBadge.astro';
+import CodeTabs from '../components/ui/CodeTabs.astro';
+import { quickstartSamples, responseSample } from '../data/code';
+import { product, site } from '../config/site';
+
+const pkg = site.name.toLowerCase();
+
+const features = [
+  { icon: Workflow, title: 'Predictable REST API', description: 'Resource-oriented endpoints, JSON everywhere, idempotency keys and cursor pagination.' },
+  { icon: Boxes, title: 'Typed SDKs', description: 'First-class Python and TypeScript SDKs with async support, retries and rich result objects.' },
+  { icon: Webhook, title: 'Webhooks', description: 'Signed events for completed analyses, new detections and monitor alerts.' },
+  { icon: Layers, title: 'STAC-native', description: 'Every scene and result is a STAC item, so it plugs into the open geospatial ecosystem.' },
+  { icon: Globe, title: 'OGC tile services', description: 'Stream imagery and results as WMTS or vector tiles into any web map or GIS.' },
+  { icon: Gauge, title: 'Built to scale', description: 'Process continent-scale jobs asynchronously with progress events and partial results.' },
+];
+
+const steps = [
+  { title: 'Get an API key', body: 'Create a key in workspace settings. Keys are scoped per project and can be rotated anytime.', code: `export ${site.name.toUpperCase()}_API_KEY="sk_live_…"` },
+  { title: 'Install an SDK', body: 'Use our Python or TypeScript SDK, or call the REST API directly from any language.', code: `pip install ${pkg}\n# or\nnpm install @${pkg}/sdk` },
+  { title: 'Define an area of interest', body: 'Upload GeoJSON, reference a saved AOI or pass a bounding box.', code: `aoi = client.aoi.from_bbox([4.38, 51.88, 4.52, 51.96])` },
+  { title: 'Run a model', body: 'Choose models and a time range. Results stream back as soon as tiles complete.', code: `job = client.analyses.create(aoi=aoi, models=["vessels-v3"])` },
+];
+
+const endpoints = [
+  { method: 'POST', path: '/v1/aois', description: 'Create an area of interest from GeoJSON' },
+  { method: 'GET', path: '/v1/catalog/search', description: 'Search available imagery (STAC API)' },
+  { method: 'POST', path: '/v1/analyses', description: 'Run one or more models over an AOI and time range' },
+  { method: 'GET', path: '/v1/analyses/{id}/features', description: 'Stream detected features as GeoJSON' },
+  { method: 'POST', path: '/v1/monitors', description: 'Create a recurring monitor with alert rules' },
+  { method: 'POST', path: '/v1/ask', description: 'Ask a natural-language question about an AOI' },
+  { method: 'POST', path: '/v1/models/{id}/fine-tune', description: 'Fine-tune a model with your labels' },
+];
+
+const sdks = [
+  { name: 'Python', install: `pip install ${pkg}`, note: 'Python 3.9+, sync & async' },
+  { name: 'TypeScript', install: `npm i @${pkg}/sdk`, note: 'Node 18+, Deno, edge runtimes' },
+  { name: 'CLI', install: `brew install ${pkg}`, note: 'Scripting, CI and quick exports' },
+];
+
+const methodTone: Record<string, string> = {
+  GET: 'text-sky-700 bg-sky-500/10 dark:text-sky-300',
+  POST: 'text-emerald-700 bg-emerald-500/10 dark:text-emerald-300',
+};
+---
+
+<BaseLayout title="Developers" description={`Build with the ${product.name} API and SDKs — geospatial AI for your products and pipelines.`}>
+  <PageHero
+    eyebrow="Developers"
+    title="Geospatial AI, one API call away"
+    description={`Detection, change monitoring and natural-language analysis — everything in ${product.name} is available through a clean API built on open standards.`}
+  >
+    <Fragment slot="actions">
+      <Button href="/contact?topic=api" size="lg">Request API access <ArrowRight class="size-4" /></Button>
+      <Button href="#quickstart" size="lg" variant="outline">Read the quickstart</Button>
+    </Fragment>
+    <div class="mx-auto mt-16 grid max-w-6xl gap-6 lg:grid-cols-[1.25fr_1fr]">
+      <CodeTabs samples={quickstartSamples} />
+      <CodeTabs samples={[responseSample]} title="200 OK · application/json" />
+    </div>
+  </PageHero>
+
+  <section class="py-20 sm:py-28">
+    <div class="container-page">
+      <SectionHeader eyebrow="Platform" title="Designed for builders" description="The primitives you need to embed geospatial intelligence into any product or data pipeline." />
+      <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          features.map((f) => (
+            <li class="rounded-2xl border border-border bg-card p-7 shadow-soft">
+              <IconBadge>
+                <f.icon />
+              </IconBadge>
+              <h3 class="mt-6 font-semibold text-foreground">{f.title}</h3>
+              <p class="mt-2 leading-relaxed text-muted-foreground">{f.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Quickstart -->
+  <section id="quickstart" class="scroll-mt-16 border-y border-border bg-muted/40 py-20 sm:py-28">
+    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+      <SectionHeader
+        align="left"
+        eyebrow="Quickstart"
+        title="Your first analysis in five minutes"
+        description="Go from API key to detections on a real area of interest — no imagery ordering, preprocessing or GPUs required."
+      />
+      <ol class="space-y-5">
+        {
+          steps.map((s, i) => (
+            <li class="grid gap-4 rounded-2xl border border-border bg-card p-6 shadow-soft sm:grid-cols-[auto_1fr]">
+              <span class="grid size-8 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{i + 1}</span>
+              <div class="min-w-0">
+                <h3 class="font-semibold text-foreground">{s.title}</h3>
+                <p class="mt-1 text-[0.95rem] text-muted-foreground">{s.body}</p>
+                <pre class="mt-4 overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 font-mono text-[0.8rem] leading-relaxed text-foreground"><code>{s.code}</code></pre>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Endpoints -->
+  <section class="py-20 sm:py-28">
+    <div class="container-page">
+      <SectionHeader eyebrow="Reference" title="Core endpoints" description={`Base URL: https://api.${pkg}.ai`} />
+      <div class="mx-auto mt-14 max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
+        <ul class="divide-y divide-border">
+          {
+            endpoints.map((e) => (
+              <li class="flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-center sm:gap-4">
+                <span class="flex items-center gap-3">
+                  <span class:list={['w-12 rounded-md py-0.5 text-center font-mono text-[11px] font-semibold', methodTone[e.method]]}>{e.method}</span>
+                  <code class="font-mono text-sm text-foreground">{e.path}</code>
+                </span>
+                <span class="text-sm text-muted-foreground sm:ml-auto sm:text-right">{e.description}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SDKs -->
+  <section id="sdks" class="scroll-mt-16 border-t border-border bg-muted/40 py-20 sm:py-24">
+    <div class="container-page">
+      <SectionHeader eyebrow="SDKs" title="Use the language you already know" />
+      <ul class="mt-14 grid gap-6 md:grid-cols-3">
+        {
+          sdks.map((s) => (
+            <li class="rounded-2xl border border-border bg-card p-7 shadow-soft">
+              <div class="flex items-center gap-3">
+                <Terminal class="size-5 text-primary" />
+                <h3 class="font-semibold text-foreground">{s.name}</h3>
+              </div>
+              <pre class="mt-5 overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 font-mono text-[0.8rem] text-foreground"><code>{s.install}</code></pre>
+              <p class="mt-3 text-sm text-muted-foreground">{s.note}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-12 flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 text-center shadow-soft sm:flex-row sm:text-left">
+        <KeyRound class="size-6 shrink-0 text-primary" />
+        <p class="text-muted-foreground">
+          <span class="font-medium text-foreground">Need a sandbox key?</span> We provide free sandbox access with sample AOIs for evaluation and hackathons.
+        </p>
+        <Button href="/contact?topic=api" variant="outline" class="shrink-0 sm:ml-auto">Get sandbox access</Button>
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Build geospatial intelligence into your product"
+    description="Talk to our developer success team about volume pricing, SLAs and custom models."
+    primary={{ label: 'Request API access', href: '/contact?topic=api' }}
+    secondary={{ label: 'See pricing', href: '/pricing' }}
+  />
+</BaseLayout>

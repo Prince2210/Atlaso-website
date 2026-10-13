@@ -1,0 +1,213 @@
+---
+import { CircleCheck, LoaderCircle } from '@lucide/astro';
+import { site } from '../../config/site';
+import { solutions } from '../../data/solutions';
+
+interface Props {
+  variant?: 'contact' | 'demo';
+  class?: string;
+}
+
+const { variant = 'contact', class: className } = Astro.props;
+const isDemo = variant === 'demo';
+const uid = `form-${variant}`;
+
+const topics = [
+  { value: 'sales', label: 'Sales & pricing' },
+  { value: 'support', label: 'Product support' },
+  { value: 'api', label: 'API access' },
+  { value: 'custom-model', label: 'Custom models' },
+  { value: 'partnerships', label: 'Partnerships' },
+  { value: 'press', label: 'Press & media' },
+  { value: 'other', label: 'Something else' },
+];
+
+const sizes = ['1–50', '51–200', '201–1,000', '1,001–5,000', '5,000+'];
+
+const input =
+  'block w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground shadow-xs transition placeholder:text-muted-foreground/70 focus:border-primary focus:ring-4 focus:ring-primary/15 focus:outline-none user-invalid:border-rose-500';
+const label = 'mb-1.5 block text-sm font-medium text-foreground';
+---
+
+<div class:list={['rounded-3xl border border-border bg-card p-6 shadow-elevated sm:p-8', className]}>
+  <form id={uid} data-lead-form data-endpoint={site.formEndpoint} novalidate class="space-y-5">
+    <input type="hidden" name="form" value={variant} />
+    <!-- Honeypot: humans never see or fill this. -->
+    <div class="hidden" aria-hidden="true">
+      <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label for={`${uid}-first`} class={label}>First name</label>
+        <input id={`${uid}-first`} name="firstName" type="text" autocomplete="given-name" required class={input} />
+      </div>
+      <div>
+        <label for={`${uid}-last`} class={label}>Last name</label>
+        <input id={`${uid}-last`} name="lastName" type="text" autocomplete="family-name" required class={input} />
+      </div>
+    </div>
+
+    <div>
+      <label for={`${uid}-email`} class={label}>Work email</label>
+      <input id={`${uid}-email`} name="email" type="email" autocomplete="email" required placeholder="you@company.com" class={input} />
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label for={`${uid}-company`} class={label}>Company</label>
+        <input id={`${uid}-company`} name="company" type="text" autocomplete="organization" required class={input} />
+      </div>
+      {
+        isDemo ? (
+          <div>
+            <label for={`${uid}-title`} class={label}>Job title</label>
+            <input id={`${uid}-title`} name="jobTitle" type="text" autocomplete="organization-title" class={input} />
+          </div>
+        ) : (
+          <div>
+            <label for={`${uid}-topic`} class={label}>How can we help?</label>
+            <select id={`${uid}-topic`} name="topic" required class={input} data-prefill="topic">
+              {topics.map((t) => (
+                <option value={t.value}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+        )
+      }
+    </div>
+
+    {
+      isDemo && (
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for={`${uid}-size`} class={label}>Company size</label>
+            <select id={`${uid}-size`} name="companySize" required class={input}>
+              <option value="" disabled selected>
+                Select…
+              </option>
+              {sizes.map((s) => (
+                <option value={s}>{s} employees</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label for={`${uid}-industry`} class={label}>Industry</label>
+            <select id={`${uid}-industry`} name="industry" required class={input} data-prefill="industry">
+              <option value="" disabled selected>
+                Select…
+              </option>
+              {solutions.map((s) => (
+                <option value={s.slug}>{s.name}</option>
+              ))}
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+      )
+    }
+
+    <div>
+      <label for={`${uid}-message`} class={label}>
+        {isDemo ? 'What would you like to analyze?' : 'Message'}
+        {isDemo && <span class="font-normal text-muted-foreground"> (optional)</span>}
+      </label>
+      <textarea
+        id={`${uid}-message`}
+        name="message"
+        rows="4"
+        required={!isDemo}
+        placeholder={isDemo ? 'e.g. Monitor construction across 40 sites in Texas, weekly.' : 'Tell us a little about what you need…'}
+        class={`${input} resize-y`}></textarea>
+    </div>
+
+    {isDemo && <input type="hidden" name="plan" data-prefill="plan" />}
+
+    <label class="flex items-start gap-3 text-sm text-muted-foreground">
+      <input type="checkbox" name="consent" required class="mt-0.5 size-4 shrink-0 rounded border-input accent-[var(--primary)]" />
+      <span>
+        I agree to the <a href="/privacy" class="font-medium text-foreground underline underline-offset-2 hover:text-primary">privacy policy</a> and to
+        being contacted about {site.name}.
+      </span>
+    </label>
+
+    <p data-error hidden role="alert" class="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3.5 py-2.5 text-sm text-rose-700 dark:text-rose-300">
+      Something went wrong. Please try again, or email us at <a href={`mailto:${site.email.sales}`} class="underline">{site.email.sales}</a>.
+    </p>
+
+    <button
+      type="submit"
+      class="group/submit inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover disabled:cursor-wait disabled:opacity-70"
+    >
+      <LoaderCircle class="hidden size-4 animate-spin group-disabled/submit:block" />
+      {isDemo ? 'Request my demo' : 'Send message'}
+    </button>
+    {isDemo && <p class="text-center text-xs text-muted-foreground">We usually reply within one business day.</p>}
+  </form>
+
+  <div data-success hidden tabindex="-1" class="py-10 text-center outline-none">
+    <span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-soft text-primary-soft-foreground">
+      <CircleCheck class="size-7" />
+    </span>
+    <h2 class="mt-6 text-2xl font-semibold text-foreground">{isDemo ? 'Your demo request is in' : 'Thanks — message received'}</h2>
+    <p class="mx-auto mt-3 max-w-sm text-muted-foreground">
+      {
+        isDemo
+          ? 'A solutions engineer will reach out within one business day to schedule a walkthrough on your area of interest.'
+          : 'Our team will get back to you within one business day.'
+      }
+    </p>
+  </div>
+</div>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-lead-form]')) {
+    const wrapper = form.parentElement!;
+    const success = wrapper.querySelector<HTMLElement>('[data-success]')!;
+    const error = form.querySelector<HTMLElement>('[data-error]')!;
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    // Prefill selects / hidden fields from the query string, e.g. /contact?topic=api.
+    const params = new URLSearchParams(window.location.search);
+    for (const field of form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-prefill]')) {
+      const value = params.get(field.dataset.prefill!);
+      if (!value) continue;
+      if (field instanceof HTMLSelectElement && ![...field.options].some((o) => o.value === value)) continue;
+      field.value = value;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form));
+      if (data.website) return; // Bot filled the honeypot.
+
+      submit.disabled = true;
+      try {
+        const endpoint = form.dataset.endpoint;
+        if (endpoint) {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(data),
+          });
+          if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        } else {
+          // No endpoint configured yet (see `formEndpoint` in src/config/site.ts) — simulate success.
+          await new Promise((resolve) => setTimeout(resolve, 700));
+        }
+        form.hidden = true;
+        success.hidden = false;
+        success.focus();
+      } catch {
+        error.hidden = false;
+        submit.disabled = false;
+      }
+    });
+  }
+</script>

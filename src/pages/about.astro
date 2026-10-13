@@ -1,0 +1,150 @@
+---
+import { MapPin } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import SectionHeader from '../components/ui/SectionHeader.astro';
+import { offices, team, values } from '../data/company';
+import { site } from '../config/site';
+
+const stats = [
+  { value: '2022', label: 'Founded' },
+  { value: '60+', label: 'Team members' },
+  { value: '14', label: 'Countries represented' },
+  { value: '120+', label: 'Customers worldwide' },
+];
+
+const investors = ['Horizon Ventures', 'Northstar Capital', 'Lattice Partners', 'Orbit Fund'];
+---
+
+<BaseLayout title="About" description={`${site.name} is on a mission to make the planet legible — so every organization can understand what’s changing on Earth in time to act.`}>
+  <PageHero
+    eyebrow="About us"
+    title="We’re making the planet legible"
+    description="Every day, satellites capture the entire Earth. Yet most of that imagery is never looked at. We build AI that turns it into understanding — so anyone can see what’s changing, in time to act."
+  />
+
+  <!-- Story -->
+  <section class="py-20 sm:py-28">
+    <div class="container-page grid gap-12 lg:grid-cols-2 lg:gap-20">
+      <div>
+        <SectionHeader align="left" eyebrow="Our story" title="From research lab to the planet’s operating picture" />
+      </div>
+      <div class="space-y-5 text-lg leading-relaxed text-muted-foreground">
+        <p>
+          {site.name} started in 2022 when a small team of remote-sensing researchers and engineers noticed the same pattern everywhere
+          they worked: organizations had access to more imagery than ever, but only a handful of specialists could turn it into answers.
+        </p>
+        <p>
+          We set out to change that by building a geospatial foundation model — trained on billions of square kilometers of optical and
+          radar imagery — and wrapping it in a product anyone can use. Today, insurers, utilities, governments, farmers and conservation
+          groups rely on {site.name} to watch the places that matter to them.
+        </p>
+        <p>We’re just getting started. The planet is changing fast, and we think everyone deserves to see it clearly.</p>
+      </div>
+    </div>
+
+    <div class="container-page mt-20">
+      <dl class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {
+          stats.map((s) => (
+            <div class="rounded-2xl border border-border bg-card p-6 text-center shadow-soft">
+              <dt class="sr-only">{s.label}</dt>
+              <dd>
+                <span class="block text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{s.value}</span>
+                <span class="mt-1 block text-sm text-muted-foreground">{s.label}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="border-y border-border bg-muted/40 py-20 sm:py-28">
+    <div class="container-page">
+      <SectionHeader eyebrow="Values" title="How we work" description="The principles that guide how we build, hire and serve customers." />
+      <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          values.map((v, i) => (
+            <li class="rounded-2xl border border-border bg-card p-7 shadow-soft">
+              <span class="font-mono text-sm text-primary">0{i + 1}</span>
+              <h3 class="mt-4 font-semibold text-foreground">{v.title}</h3>
+              <p class="mt-2 leading-relaxed text-muted-foreground">{v.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="py-20 sm:py-28">
+    <div class="container-page">
+      <SectionHeader eyebrow="Leadership" title="The people behind the platform" />
+      <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          team.map((p) => (
+            <li class="flex gap-5 rounded-2xl border border-border bg-card p-6 shadow-soft">
+              <span class:list={['grid size-14 shrink-0 place-items-center rounded-full text-lg font-semibold text-white', p.color]}>
+                {p.initials}
+              </span>
+              <div>
+                <h3 class="font-semibold text-foreground">{p.name}</h3>
+                <p class="text-sm text-primary">{p.role}</p>
+                <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{p.bio}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Investors & offices -->
+  <section class="border-t border-border bg-muted/40 py-20 sm:py-24">
+    <div class="container-page grid gap-12 lg:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-semibold text-foreground">Backed by long-term investors</h2>
+        <p class="mt-3 text-muted-foreground">We’re supported by funds and operators who share our belief in a more transparent planet.</p>
+        <ul class="mt-8 grid grid-cols-2 gap-3">
+          {
+            investors.map((i) => (
+              <li class="rounded-xl border border-border bg-card px-4 py-5 text-center font-semibold tracking-tight text-muted-foreground shadow-soft">
+                {i}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-2xl font-semibold text-foreground">Where we are</h2>
+        <p class="mt-3 text-muted-foreground">A distributed team with hubs on three continents.</p>
+        <ul class="mt-8 space-y-3">
+          {
+            offices.map((o) => (
+              <li class="flex items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-soft">
+                <MapPin class="size-5 shrink-0 text-primary" />
+                <span>
+                  <span class="block font-medium text-foreground">{o.city}</span>
+                  <span class="block text-sm text-muted-foreground">
+                    {o.address}, {o.country}
+                  </span>
+                </span>
+                <span class="ml-auto font-mono text-xs text-muted-foreground">{o.tz}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Help us map what matters"
+    description="We’re hiring across machine learning, engineering, product and go-to-market."
+    primary={{ label: 'View open roles', href: '/careers' }}
+    secondary={{ label: 'Contact us', href: '/contact' }}
+  />
+</BaseLayout>

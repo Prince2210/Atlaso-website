@@ -1,0 +1,36 @@
+---
+import { customers } from '../../data/testimonials';
+
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title = 'Trusted by teams mapping the world at', class: className } = Astro.props;
+
+// Simple geometric marks for the (placeholder) customer wordmarks.
+const marks = [
+  'M2 18 L10 4 L18 18 Z',
+  'M10 2 a8 8 0 1 0 0.01 0 Z M10 6 a4 4 0 1 1 -0.01 0 Z',
+  'M2 2 H18 V18 H2 Z M6 6 V14 H14 V6 Z',
+  'M2 10 C 6 2 14 18 18 10',
+  'M2 4 H18 M2 10 H18 M2 16 H18',
+  'M10 2 L18 10 L10 18 L2 10 Z',
+];
+---
+
+<div class={className}>
+  <p class="text-center text-sm text-muted-foreground">{title}</p>
+  <ul class="mt-8 grid grid-cols-2 items-center gap-x-8 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+    {
+      customers.map((name, i) => (
+        <li class="flex items-center justify-center gap-2 text-muted-foreground/80 grayscale transition-colors hover:text-foreground">
+          <svg viewBox="0 0 20 20" class="size-5" fill={i % 2 ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="2" fill-rule="evenodd" aria-hidden="true">
+            <path d={marks[i % marks.length]} />
+          </svg>
+          <span class="text-[0.95rem] font-semibold tracking-tight whitespace-nowrap">{name}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>

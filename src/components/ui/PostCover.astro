@@ -1,0 +1,59 @@
+---
+/**
+ * Generated cover art for blog posts — a topographic contour pattern tinted by
+ * category. Swap for real images by adding a `cover` field to the collection.
+ */
+interface Props {
+  category: string;
+  seed: string;
+  class?: string;
+}
+
+const { category, seed, class: className } = Astro.props;
+
+const palettes: Record<string, [string, string, string]> = {
+  Product: ['#0f3d3e', '#0b2530', '#5eead4'],
+  Research: ['#2a2350', '#141433', '#c4b5fd'],
+  Guides: ['#3b2d14', '#1d1709', '#fcd34d'],
+  Company: ['#3a1d2b', '#1c0d15', '#fda4af'],
+};
+const [from, to, line] = palettes[category] ?? palettes.Product;
+
+// Deterministic offsets from the seed so each post gets a distinct pattern.
+let h = 0;
+for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+const cx = 120 + (h % 360);
+const cy = 60 + ((h >> 8) % 160);
+const rings = Array.from({ length: 14 }, (_, i) => 18 + i * 22);
+const uid = `cover-${h.toString(36)}`;
+---
+
+<div class:list={['relative overflow-hidden', className]} aria-hidden="true">
+  <svg viewBox="0 0 600 340" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 size-full">
+    <defs>
+      <linearGradient id={`${uid}-bg`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color={from}></stop>
+        <stop offset="1" stop-color={to}></stop>
+      </linearGradient>
+      <radialGradient id={`${uid}-glow`} cx={cx / 600} cy={cy / 340} r="0.6">
+        <stop offset="0" stop-color={line} stop-opacity="0.35"></stop>
+        <stop offset="1" stop-color={line} stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+    <rect width="600" height="340" fill={`url(#${uid}-bg)`}></rect>
+    <rect width="600" height="340" fill={`url(#${uid}-glow)`}></rect>
+    <g fill="none" stroke={line} stroke-opacity="0.32" stroke-width="1.2">
+      {
+        rings.map((r, i) => (
+          <ellipse cx={cx} cy={cy} rx={r * 1.35} ry={r} transform={`rotate(${(h % 40) - 20 + i * 1.5} ${cx} ${cy})`} />
+        ))
+      }
+    </g>
+    <g stroke={line} stroke-opacity="0.12">
+      {[100, 200, 300, 400, 500].map((x) => <line x1={x} y1="0" x2={x} y2="340" />)}
+      {[85, 170, 255].map((y) => <line x1="0" y1={y} x2="600" y2={y} />)}
+    </g>
+    <circle cx={cx} cy={cy} r="5" fill={line}></circle>
+    <circle cx={cx} cy={cy} r="12" fill="none" stroke={line} stroke-opacity="0.6"></circle>
+  </svg>
+</div>
