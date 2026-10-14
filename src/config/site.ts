@@ -48,6 +48,12 @@ export const features = {
    * Set to `true` when the public API is ready to launch.
    */
   developers: false,
+  /**
+   * Pricing: the /pricing page and links to it (header, footer, product page,
+   * 404 page) plus pricing claims on solution pages. When off, prospects are
+   * pointed to sales instead.
+   */
+  pricing: false,
 } as const;
 
 export const product = {

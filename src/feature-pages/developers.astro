@@ -8,12 +8,12 @@ import SectionHeader from '../components/ui/SectionHeader.astro';
 import IconBadge from '../components/ui/IconBadge.astro';
 import CodeTabs from '../components/ui/CodeTabs.astro';
 import { quickstartSamples, responseSample } from '../data/code';
-import { product, site } from '../config/site';
+import { features, product, site } from '../config/site';
 
 const pkg = site.name.toLowerCase();
 const apiHost = `api.${new URL(site.url).hostname}`;
 
-const features = [
+const capabilities = [
   { icon: Workflow, title: 'Predictable REST API', description: 'Resource-oriented endpoints, JSON everywhere, idempotency keys and cursor pagination.' },
   { icon: Boxes, title: 'Typed SDKs', description: 'First-class Python and TypeScript SDKs with async support, retries and rich result objects.' },
   { icon: Webhook, title: 'Webhooks', description: 'Signed events for completed analyses, new detections and monitor alerts.' },
@@ -72,7 +72,7 @@ const methodTone: Record<string, string> = {
       <SectionHeader eyebrow="Platform" title="Designed for builders" description="The primitives you need to embed geospatial intelligence into any product or data pipeline." />
       <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {
-          features.map((f) => (
+          capabilities.map((f) => (
             <li class="rounded-2xl border border-border bg-card p-7 shadow-soft">
               <IconBadge>
                 <f.icon />
@@ -166,6 +166,6 @@ const methodTone: Record<string, string> = {
     title="Build geospatial intelligence into your product"
     description="Talk to our developer success team about volume pricing, SLAs and custom models."
     primary={{ label: 'Request API access', href: '/contact?topic=api' }}
-    secondary={{ label: 'See pricing', href: '/pricing' }}
+    secondary={features.pricing ? { label: 'See pricing', href: '/pricing' } : { label: 'Contact sales', href: '/contact?topic=sales' }}
   />
 </BaseLayout>

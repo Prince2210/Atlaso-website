@@ -2,11 +2,12 @@
 import { ArrowLeft } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
+import { features } from '../config/site';
 
 const links = [
   { label: 'Product', href: '/product' },
   { label: 'Solutions', href: '/solutions' },
-  { label: 'Pricing', href: '/pricing' },
+  ...(features.pricing ? [{ label: 'Pricing', href: '/pricing' }] : []),
   { label: 'Blog', href: '/blog' },
 ];
 ---

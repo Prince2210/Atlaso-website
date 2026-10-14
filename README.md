@@ -20,7 +20,7 @@ npm run preview   # serve the production build
 | `/` | Home: hero with product mockup, capabilities, change detection, solutions, API, testimonials |
 | `/product` | Platform overview, capabilities, model catalog, FAQ |
 | `/solutions`, `/solutions/[slug]` | Industry overview + 6 generated industry pages |
-| `/pricing` | Plans with monthly/annual toggle, comparison table, add-ons, FAQ |
+| `/pricing` | Plans with monthly/annual toggle, comparison table, add-ons, FAQ (only built when `features.pricing` is on) |
 | `/developers` | API, SDKs, quickstart, endpoints (only built when `features.developers` is on; see [Feature flags](#feature-flags)) |
 | `/about`, `/careers` | Company, team, values, open roles |
 | `/blog`, `/blog/[id]` | Blog from Markdown content collection |
@@ -68,6 +68,7 @@ Parts of the site that aren't ready to launch are controlled by `features` in `s
 | Flag | Default | Controls |
 | --- | --- | --- |
 | `developers` | `false` | The `/developers` page, the home page "For developers" section, the product page "Integrate" row and code samples, header/footer developer links, API/SDK/webhook rows in pricing, the platform diagram, changelog lines, the contact form's "API access" topic, and API wording in product copy |
+| `pricing` | `false` | The `/pricing` page, Pricing links in the header, footer and 404 page, the product page's "See pricing" button (replaced by "Explore solutions"), and the pricing bullet on solution pages |
 
 How it works:
 
