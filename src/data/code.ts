@@ -1,6 +1,7 @@
 import { product, site } from '../config/site';
 
 const pkg = site.name.toLowerCase();
+const apiHost = `api.${new URL(site.url).hostname}`;
 const cls = product.shortName;
 
 export type CodeSample = { label: string; lang: 'python' | 'ts' | 'bash' | 'json'; code: string };
@@ -44,7 +45,7 @@ console.log(monitor.id, monitor.nextRunAt);`,
   {
     label: 'cURL',
     lang: 'bash',
-    code: `curl https://api.${pkg}.ai/v1/ask \\
+    code: `curl https://${apiHost}/v1/ask \\
   -H "Authorization: Bearer $${site.name.toUpperCase()}_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -63,7 +64,7 @@ export const responseSample: CodeSample = {
   "evidence": {
     "model": "buildings-v4",
     "scenes": ["optical_20250304", "optical_20260918"],
-    "features": "https://api.${pkg}.ai/v1/results/res_93kd/features.geojson"
+    "features": "https://${apiHost}/v1/results/res_93kd/features.geojson"
   },
   "usage": { "km2": 38.4, "credits": 12 }
 }`,

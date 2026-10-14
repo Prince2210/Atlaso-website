@@ -11,6 +11,7 @@ import { quickstartSamples, responseSample } from '../data/code';
 import { product, site } from '../config/site';
 
 const pkg = site.name.toLowerCase();
+const apiHost = `api.${new URL(site.url).hostname}`;
 
 const features = [
   { icon: Workflow, title: 'Predictable REST API', description: 'Resource-oriented endpoints, JSON everywhere, idempotency keys and cursor pagination.' },
@@ -114,7 +115,7 @@ const methodTone: Record<string, string> = {
   <!-- Endpoints -->
   <section class="py-20 sm:py-28">
     <div class="container-page">
-      <SectionHeader eyebrow="Reference" title="Core endpoints" description={`Base URL: https://api.${pkg}.ai`} />
+      <SectionHeader eyebrow="Reference" title="Core endpoints" description={`Base URL: https://${apiHost}`} />
       <div class="mx-auto mt-14 max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
         <ul class="divide-y divide-border">
           {

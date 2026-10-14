@@ -12,17 +12,17 @@ export const site = {
   tagline: 'Geospatial intelligence, powered by AI',
   description:
     'Atlaso is the geospatial AI platform that turns satellite, aerial and drone imagery into decision-ready insight — detect objects, monitor change and ask questions of the planet in plain language.',
-  // Keep in sync with `site` in astro.config.mjs.
-  url: 'https://atlaso.ai',
+  // Production URL — also used by astro.config.mjs. Keep public/CNAME in sync.
+  url: 'https://atlaso.co.in',
   // Where "Sign in" points. Replace with the real app URL when it exists.
   appUrl: '#',
   email: {
-    sales: 'sales@atlaso.ai',
-    support: 'support@atlaso.ai',
-    press: 'press@atlaso.ai',
-    careers: 'careers@atlaso.ai',
-    security: 'security@atlaso.ai',
-    privacy: 'privacy@atlaso.ai',
+    sales: 'sales@atlaso.co.in',
+    support: 'support@atlaso.co.in',
+    press: 'press@atlaso.co.in',
+    careers: 'careers@atlaso.co.in',
+    security: 'security@atlaso.co.in',
+    privacy: 'privacy@atlaso.co.in',
   },
   social: {
     x: '#',

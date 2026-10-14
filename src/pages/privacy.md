@@ -41,7 +41,7 @@ We keep personal information for as long as needed for the purposes described ab
 
 ## Your rights
 
-Depending on where you live, you may have the right to access, correct, delete or port your personal information, and to object to or restrict certain processing. To exercise these rights, contact [privacy@atlaso.ai](mailto:privacy@atlaso.ai).
+Depending on where you live, you may have the right to access, correct, delete or port your personal information, and to object to or restrict certain processing. To exercise these rights, contact [privacy@atlaso.co.in](mailto:privacy@atlaso.co.in).
 
 ## Cookies
 
@@ -49,4 +49,4 @@ We use essential cookies to operate our website and, with your consent where req
 
 ## Contact
 
-Questions about this policy can be sent to [privacy@atlaso.ai](mailto:privacy@atlaso.ai).
+Questions about this policy can be sent to [privacy@atlaso.co.in](mailto:privacy@atlaso.co.in).

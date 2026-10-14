@@ -55,11 +55,38 @@ The contact and demo forms validate in the browser. With `formEndpoint` empty in
 
 ### Before launch
 
-- Set the production domain in **both** `astro.config.mjs` (`site`) and `src/config/site.ts` (`url`), and in `public/robots.txt`.
+- If the domain changes, update `url` in `src/config/site.ts` and the domain in `public/CNAME`. Everything else (canonical URLs, sitemap, `robots.txt`) derives from `url`.
 - Replace `appUrl` and the `social` links (currently `#`) in `src/config/site.ts`.
 - Replace placeholder customers, testimonials, metrics, compliance claims and team members with real ones.
 - Have counsel review the privacy policy and terms.
 - Add a 1200×630 social image and pass it to `BaseLayout` via the `image` prop.
+
+## Deploying
+
+The site deploys to **GitHub Pages** at [atlaso.co.in](https://atlaso.co.in) via `.github/workflows/deploy.yml`. Every push to `main` builds and publishes it, and you can also run the workflow manually from the Actions tab.
+
+One-time setup:
+
+1. **Repository visibility.** GitHub Pages needs a public repository on the free plan. Private repositories need GitHub Pro, Team or Enterprise.
+2. **Pages source.** In **Settings → Pages**, set **Source** to **GitHub Actions**.
+3. **Custom domain.** In **Settings → Pages → Custom domain**, enter `atlaso.co.in` and save.
+4. **DNS at Hostinger.** In hPanel → **Domains → atlaso.co.in → DNS / Nameservers → DNS records**, remove any existing `A` record for `@` and `CNAME` record for `www`, then add:
+
+   | Type | Name | Points to |
+   | --- | --- | --- |
+   | A | `@` | `185.199.108.153` |
+   | A | `@` | `185.199.109.153` |
+   | A | `@` | `185.199.110.153` |
+   | A | `@` | `185.199.111.153` |
+   | AAAA | `@` | `2606:50c0:8000::153` |
+   | AAAA | `@` | `2606:50c0:8001::153` |
+   | AAAA | `@` | `2606:50c0:8002::153` |
+   | AAAA | `@` | `2606:50c0:8003::153` |
+   | CNAME | `www` | `prince2210.github.io` |
+
+   `www.atlaso.co.in` then redirects to `atlaso.co.in` automatically.
+5. **HTTPS.** Once DNS has propagated and GitHub has issued the certificate, tick **Enforce HTTPS** in **Settings → Pages**.
+6. **Domain verification (recommended).** In your GitHub *account* settings → **Pages → Add a domain**, verify `atlaso.co.in` with the TXT record GitHub gives you. This stops anyone else from claiming the domain on GitHub Pages.
 
 ## Theming
 

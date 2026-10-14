@@ -48,4 +48,4 @@ We may update these Terms from time to time. If changes are material, we’ll pr
 
 ## Contact
 
-Questions about these Terms can be sent to [legal@atlaso.ai](mailto:legal@atlaso.ai).
+Questions about these Terms can be sent to [legal@atlaso.co.in](mailto:legal@atlaso.co.in).
