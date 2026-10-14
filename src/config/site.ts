@@ -37,11 +37,23 @@ export const site = {
   formEndpoint: '',
 } as const;
 
+/**
+ * Feature flags — switch parts of the site on or off globally, then rebuild/redeploy.
+ */
+export const features = {
+  /**
+   * Developer platform: the /developers page, the "For developers" section on the
+   * home page, code samples, and API / SDK / webhook mentions in navigation,
+   * pricing, product copy, the platform diagram, changelog and contact form.
+   * Set to `true` when the public API is ready to launch.
+   */
+  developers: false,
+} as const;
+
 export const product = {
   name: 'Atlaso Lens',
   shortName: 'Lens',
   version: '2.0',
   tagline: 'The AI copilot for planet-scale imagery',
-  description:
-    'Detect, monitor and query anything on Earth — across optical, radar, aerial and drone imagery — from a single AI-native workspace and API.',
+  description: `Detect, monitor and query anything on Earth — across optical, radar, aerial and drone imagery — from a single AI-native workspace${features.developers ? ' and API' : ''}.`,
 } as const;

@@ -4,11 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import LeadForm from '../components/sections/LeadForm.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
 import { offices } from '../data/company';
-import { site } from '../config/site';
+import { features, site } from '../config/site';
 
 const channels = [
   { icon: Briefcase, title: 'Sales', description: 'Pricing, pilots and enterprise plans.', email: site.email.sales },
-  { icon: Headphones, title: 'Support', description: 'Help with your workspace or the API.', email: site.email.support },
+  { icon: Headphones, title: 'Support', description: `Help with your workspace${features.developers ? ' or the API' : ''}.`, email: site.email.support },
   { icon: Newspaper, title: 'Press', description: 'Media enquiries and brand assets.', email: site.email.press },
 ];
 ---

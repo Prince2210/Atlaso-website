@@ -16,7 +16,7 @@ import {
   Satellite,
   Sparkles,
 } from '@lucide/astro';
-import { product } from '../../config/site';
+import { features, product } from '../../config/site';
 
 const inputs = [
   { icon: Satellite, label: 'Optical satellite', meta: '30 cm – 10 m' },
@@ -35,8 +35,10 @@ const engine = [
 
 const outputs = [
   { icon: LayoutDashboard, label: 'Workspace & maps', meta: 'Explore, compare, share' },
-  { icon: BellRing, label: 'Alerts & webhooks', meta: 'Email, Slack, Teams, HTTP' },
-  { icon: Code, label: 'API & SDKs', meta: 'REST, Python, TypeScript' },
+  features.developers
+    ? { icon: BellRing, label: 'Alerts & webhooks', meta: 'Email, Slack, Teams, HTTP' }
+    : { icon: BellRing, label: 'Alerts', meta: 'Email, Slack, Teams' },
+  ...(features.developers ? [{ icon: Code, label: 'API & SDKs', meta: 'REST, Python, TypeScript' }] : []),
   { icon: FileOutput, label: 'Exports & BI', meta: 'GeoParquet, COG, OGC' },
 ];
 ---

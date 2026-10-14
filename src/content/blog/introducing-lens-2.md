@@ -20,7 +20,9 @@ Today we’re launching **Lens 2.0**, with a new way to work: just ask.
 
 **Save questions as monitors.** Any question can become a recurring monitor. Lens re-runs it on every new capture and alerts you when the answer changes meaningfully.
 
+:::feature{name="developers"}
 **A new `/v1/ask` endpoint.** Everything in the Ask panel is available through the API, so you can build natural-language geospatial search into your own products.
+:::
 
 ## How it works
 

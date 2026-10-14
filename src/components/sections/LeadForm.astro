@@ -1,6 +1,6 @@
 ---
 import { CircleCheck, LoaderCircle } from '@lucide/astro';
-import { site } from '../../config/site';
+import { features, site } from '../../config/site';
 import { solutions } from '../../data/solutions';
 
 interface Props {
@@ -15,7 +15,7 @@ const uid = `form-${variant}`;
 const topics = [
   { value: 'sales', label: 'Sales & pricing' },
   { value: 'support', label: 'Product support' },
-  { value: 'api', label: 'API access' },
+  ...(features.developers ? [{ value: 'api', label: 'API access' }] : []),
   { value: 'custom-model', label: 'Custom models' },
   { value: 'partnerships', label: 'Partnerships' },
   { value: 'press', label: 'Press & media' },

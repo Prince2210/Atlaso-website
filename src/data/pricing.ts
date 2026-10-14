@@ -1,3 +1,5 @@
+import { features } from '../config/site';
+
 export type Plan = {
   name: string;
   description: string;
@@ -41,7 +43,7 @@ export const plans: Plan[] = [
       'Weekly revisits + SAR fusion',
       'All 40+ pre-trained models',
       'Ask in plain language',
-      'Alerts, webhooks & API (100k calls/mo)',
+      features.developers ? 'Alerts, webhooks & API (100k calls/mo)' : 'Alerts via email, Slack & Teams',
       '15 seats · priority support',
     ],
   },
@@ -91,8 +93,12 @@ export const comparison: { group: string; rows: { feature: string; values: [Cell
     rows: [
       { feature: 'Exports (GeoJSON, CSV)', values: [true, true, true] },
       { feature: 'GeoParquet, COG, OGC tiles', values: [false, true, true] },
-      { feature: 'REST API & SDKs', values: [false, '100k calls/mo', 'Custom'] },
-      { feature: 'Alerts & webhooks', values: ['Email', true, true] },
+      ...(features.developers
+        ? [
+            { feature: 'REST API & SDKs', values: [false, '100k calls/mo', 'Custom'] as [Cell, Cell, Cell] },
+            { feature: 'Alerts & webhooks', values: ['Email', true, true] as [Cell, Cell, Cell] },
+          ]
+        : [{ feature: 'Alerts (email, Slack, Teams)', values: ['Email', true, true] as [Cell, Cell, Cell] }]),
     ],
   },
   {
@@ -121,8 +127,8 @@ export const pricingFaq = [
     a: 'Every plan starts with a 14-day pilot on your own area of interest, with a solutions engineer to help you set up models and alerts. No credit card required.',
   },
   {
-    q: 'What happens if I exceed my area or API limits?',
-    a: 'We’ll notify you as you approach a limit. You can upgrade at any time, or pay for overage at a transparent per-km² and per-call rate — we never pause monitoring without warning.',
+    q: features.developers ? 'What happens if I exceed my area or API limits?' : 'What happens if I exceed my area limit?',
+    a: `We’ll notify you as you approach a limit. You can upgrade at any time, or pay for overage at a transparent per-km²${features.developers ? ' and per-call' : ''} rate — we never pause monitoring without warning.`,
   },
   {
     q: 'Do you offer discounts for nonprofits, research or the public sector?',

@@ -1,3 +1,4 @@
+import { features } from './site';
 import { solutions } from '../data/solutions';
 
 export type NavLink = {
@@ -10,6 +11,9 @@ export type NavItem =
   | { label: string; href: string }
   | { label: string; children: NavLink[] };
 
+// Items gated behind a feature flag are filtered out below when the flag is off.
+const developerNav: NavItem[] = features.developers ? [{ label: 'Developers', href: '/developers' }] : [];
+
 export const mainNav: NavItem[] = [
   { label: 'Product', href: '/product' },
   {
@@ -20,7 +24,7 @@ export const mainNav: NavItem[] = [
       description: s.summary,
     })),
   },
-  { label: 'Developers', href: '/developers' },
+  ...developerNav,
   { label: 'Pricing', href: '/pricing' },
   {
     label: 'Company',
@@ -49,15 +53,19 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
     title: 'Solutions',
     links: solutions.map((s) => ({ label: s.name, href: `/solutions/${s.slug}` })),
   },
-  {
-    title: 'Developers',
-    links: [
-      { label: 'API overview', href: '/developers' },
-      { label: 'Quickstart', href: '/developers#quickstart' },
-      { label: 'SDKs', href: '/developers#sdks' },
-      { label: 'Security', href: '/security' },
-    ],
-  },
+  ...(features.developers
+    ? [
+        {
+          title: 'Developers',
+          links: [
+            { label: 'API overview', href: '/developers' },
+            { label: 'Quickstart', href: '/developers#quickstart' },
+            { label: 'SDKs', href: '/developers#sdks' },
+            { label: 'Security', href: '/security' },
+          ],
+        },
+      ]
+    : []),
   {
     title: 'Company',
     links: [
