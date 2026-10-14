@@ -6,7 +6,7 @@ import CTASection from '../components/sections/CTASection.astro';
 import SectionHeader from '../components/ui/SectionHeader.astro';
 import IconBadge from '../components/ui/IconBadge.astro';
 import Button from '../components/ui/Button.astro';
-import { site } from '../config/site';
+import { features, site } from '../config/site';
 
 const compliance = [
   { name: 'SOC 2 Type II', status: 'Audited annually' },
@@ -18,7 +18,7 @@ const compliance = [
 const pillars = [
   { icon: Lock, title: 'Encryption', description: 'TLS 1.3 for data in transit and AES-256 for data at rest, with keys managed in a hardware-backed KMS. Customer-managed keys available on Enterprise.' },
   { icon: KeyRound, title: 'Access control', description: 'SSO via SAML 2.0 and OIDC, SCIM provisioning, enforced MFA and fine-grained, project-level roles.' },
-  { icon: ScrollText, title: 'Audit logging', description: 'Immutable logs of every sign-in, API call, export and permission change, exportable to your SIEM.' },
+  { icon: ScrollText, title: 'Audit logging', description: `Immutable logs of every sign-in, ${features.developers ? 'API call, ' : ''}export and permission change, exportable to your SIEM.` },
   { icon: ServerCog, title: 'Flexible deployment', description: 'Multi-tenant cloud, single-tenant, private VPC in your cloud account, or fully air-gapped on-premises.' },
   { icon: Globe, title: 'Data residency', description: 'Choose where imagery, results and metadata are stored and processed: United States, European Union or India.' },
   { icon: Eye, title: 'Responsible AI', description: 'Published model cards, evaluation across regions, and policies that prohibit surveillance of individuals.' },

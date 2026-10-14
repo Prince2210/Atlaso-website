@@ -21,7 +21,7 @@ npm run preview   # serve the production build
 | `/product` | Platform overview, capabilities, model catalog, FAQ |
 | `/solutions`, `/solutions/[slug]` | Industry overview + 6 generated industry pages |
 | `/pricing` | Plans with monthly/annual toggle, comparison table, add-ons, FAQ |
-| `/developers` | API, SDKs, quickstart, endpoints |
+| `/developers` | API, SDKs, quickstart, endpoints (only built when `features.developers` is on; see [Feature flags](#feature-flags)) |
 | `/about`, `/careers` | Company, team, values, open roles |
 | `/blog`, `/blog/[id]` | Blog from Markdown content collection |
 | `/changelog` | Release notes |
@@ -60,6 +60,28 @@ The contact and demo forms validate in the browser. With `formEndpoint` empty in
 - Replace placeholder customers, testimonials, metrics, compliance claims and team members with real ones.
 - Have counsel review the privacy policy and terms.
 - Add a 1200×630 social image and pass it to `BaseLayout` via the `image` prop.
+
+## Feature flags
+
+Parts of the site that aren't ready to launch are controlled by `features` in `src/config/site.ts`. Change a flag, then commit and push to `main` to redeploy.
+
+| Flag | Default | Controls |
+| --- | --- | --- |
+| `developers` | `false` | The `/developers` page, the home page "For developers" section, the product page "Integrate" row and code samples, header/footer developer links, API/SDK/webhook rows in pricing, the platform diagram, changelog lines, the contact form's "API access" topic, and API wording in product copy |
+
+How it works:
+
+- **Pages:** flagged pages live in `src/feature-pages/` (not `src/pages/`) and are added by the small integration in `astro.config.mjs` only when their flag is on. When off, they aren't built at all, so they 404 and stay out of the sitemap.
+- **Components and data:** import `features` from `src/config/site.ts` and check it, e.g. `{features.developers && (<section>…</section>)}`.
+- **Markdown** (blog posts, legal pages): wrap flagged content in a directive block. It's removed when the flag is off:
+
+  ```md
+  :::feature{name="developers"}
+  Content that only appears when the developers flag is on.
+  :::
+  ```
+
+To add a new flag, add it to `features`, then gate content with it the same way.
 
 ## Deploying
 

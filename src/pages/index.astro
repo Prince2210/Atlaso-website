@@ -25,7 +25,7 @@ import BeforeAfter from '../components/visuals/BeforeAfter.astro';
 import LogoCloud from '../components/sections/LogoCloud.astro';
 import Testimonials from '../components/sections/Testimonials.astro';
 import CTASection from '../components/sections/CTASection.astro';
-import { product, site } from '../config/site';
+import { features, product, site } from '../config/site';
 import { solutions } from '../data/solutions';
 import { quickstartSamples } from '../data/code';
 
@@ -185,7 +185,7 @@ const trust = [
       <SectionHeader
         eyebrow="Platform"
         title="Everything you need to understand the planet"
-        description={`One workspace and one API for detection, segmentation, change monitoring and natural-language analysis — built on ${site.name}’s geospatial foundation model.`}
+        description={`One workspace${features.developers ? ' and one API' : ''} for detection, segmentation, change monitoring and natural-language analysis — built on ${site.name}’s geospatial foundation model.`}
       />
 
       <div class="mt-16 grid gap-5 lg:grid-cols-3">
@@ -380,34 +380,38 @@ const trust = [
     </div>
   </section>
 
-  <!-- Developers -->
-  <section class="py-20 sm:py-28">
-    <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-      <div>
-        <SectionHeader
-          align="left"
-          eyebrow="For developers"
-          title="Planet-scale analysis, one API call away"
-          description={`Everything in the ${product.shortName} workspace is available through a clean, well-documented API — so you can embed geospatial AI into your own products and pipelines.`}
-        />
-        <ul class="mt-8 space-y-3">
-          {
-            devPoints.map((p) => (
-              <li class="flex items-start gap-3 text-foreground">
-                <Check class="mt-0.5 size-5 shrink-0 text-primary" />
-                {p}
-              </li>
-            ))
-          }
-        </ul>
-        <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-          <Button href="/developers">Explore the API <ArrowRight class="size-4" /></Button>
-          <Button href="/contact?topic=api" variant="outline">Request API access</Button>
+  <!-- Developers (feature flag: features.developers) -->
+  {
+    features.developers && (
+      <section class="py-20 sm:py-28">
+        <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHeader
+              align="left"
+              eyebrow="For developers"
+              title="Planet-scale analysis, one API call away"
+              description={`Everything in the ${product.shortName} workspace is available through a clean, well-documented API — so you can embed geospatial AI into your own products and pipelines.`}
+            />
+            <ul class="mt-8 space-y-3">
+              {
+                devPoints.map((p) => (
+                  <li class="flex items-start gap-3 text-foreground">
+                    <Check class="mt-0.5 size-5 shrink-0 text-primary" />
+                    {p}
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Button href="/developers">Explore the API <ArrowRight class="size-4" /></Button>
+              <Button href="/contact?topic=api" variant="outline">Request API access</Button>
+            </div>
+          </div>
+          <CodeTabs samples={quickstartSamples} />
         </div>
-      </div>
-      <CodeTabs samples={quickstartSamples} />
-    </div>
-  </section>
+      </section>
+    )
+  }
 
   <Testimonials />
 

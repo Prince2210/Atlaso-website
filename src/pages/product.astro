@@ -11,7 +11,7 @@ import CodeTabs from '../components/ui/CodeTabs.astro';
 import PlatformDiagram from '../components/visuals/PlatformDiagram.astro';
 import SatelliteScene from '../components/visuals/SatelliteScene.astro';
 import BeforeAfter from '../components/visuals/BeforeAfter.astro';
-import { product } from '../config/site';
+import { features, product } from '../config/site';
 import { models } from '../data/models';
 import { responseSample } from '../data/code';
 
@@ -44,7 +44,7 @@ const faq = [
   },
   {
     q: 'Does it work with our existing GIS tools?',
-    a: 'Results are standard geospatial formats and services, so they open directly in desktop GIS, web maps, notebooks and data warehouses. Webhooks and the API let you push insights into any internal system.',
+    a: `Results are standard geospatial formats and services, so they open directly in desktop GIS, web maps, notebooks and data warehouses.${features.developers ? ' Webhooks and the API let you push insights into any internal system.' : ''}`,
   },
 ];
 ---
@@ -82,7 +82,7 @@ const faq = [
         eyebrow="Monitor change"
         title="Continuous monitoring with less noise"
         description="Set up a monitor once and get notified only when something meaningful changes. Our change engine understands seasons, shadows, clouds and sensor differences."
-        bullets={['Optical + SAR fusion', 'Seasonal baselines', 'Per-object change history', 'Alerts via email, Slack or webhook']}
+        bullets={['Optical + SAR fusion', 'Seasonal baselines', 'Per-object change history', `Alerts via email, Slack${features.developers ? ' or webhook' : ' or Teams'}`]}
       >
         <BeforeAfter uid="product-ba" />
       </FeatureRow>
@@ -121,15 +121,19 @@ const faq = [
         </div>
       </FeatureRow>
 
-      <FeatureRow
-        reverse
-        eyebrow="Integrate"
-        title="Insights where your team already works"
-        description="Every result is a standard geospatial asset with a stable ID. Pull it via API, stream it into your warehouse or open it in your favourite GIS."
-        bullets={['REST API & typed SDKs', 'Webhooks for every event', 'OGC-compliant tile services', 'Warehouse-friendly exports']}
-      >
-        <CodeTabs samples={[responseSample]} title="POST /v1/ask → 200 OK" />
-      </FeatureRow>
+      {
+        features.developers && (
+          <FeatureRow
+            reverse
+            eyebrow="Integrate"
+            title="Insights where your team already works"
+            description="Every result is a standard geospatial asset with a stable ID. Pull it via API, stream it into your warehouse or open it in your favourite GIS."
+            bullets={['REST API & typed SDKs', 'Webhooks for every event', 'OGC-compliant tile services', 'Warehouse-friendly exports']}
+          >
+            <CodeTabs samples={[responseSample]} title="POST /v1/ask → 200 OK" />
+          </FeatureRow>
+        )
+      }
     </div>
   </section>
 
