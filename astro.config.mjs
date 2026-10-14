@@ -11,15 +11,19 @@ import { features, site } from './src/config/site.ts';
  * @returns {import('astro').AstroIntegration}
  */
 function featurePages() {
+  /** @type {{ flag: keyof typeof features; pattern: string; file: string }[]} */
+  const pages = [
+    { flag: 'developers', pattern: '/developers', file: './src/feature-pages/developers.astro' },
+    { flag: 'pricing', pattern: '/pricing', file: './src/feature-pages/pricing.astro' },
+  ];
   return {
     name: 'atlaso:feature-pages',
     hooks: {
       'astro:config:setup': ({ injectRoute }) => {
-        if (features.developers) {
-          injectRoute({
-            pattern: '/developers',
-            entrypoint: new URL('./src/feature-pages/developers.astro', import.meta.url),
-          });
+        for (const page of pages) {
+          if (features[page.flag]) {
+            injectRoute({ pattern: page.pattern, entrypoint: new URL(page.file, import.meta.url) });
+          }
         }
       },
     },

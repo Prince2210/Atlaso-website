@@ -53,7 +53,13 @@ const faq = [
   <PageHero eyebrow={product.name} title={product.tagline} description={product.description}>
     <Fragment slot="actions">
       <Button href="/demo" size="lg">Book a demo <ArrowRight class="size-4" /></Button>
-      <Button href="/pricing" size="lg" variant="outline">See pricing</Button>
+      {
+        features.pricing ? (
+          <Button href="/pricing" size="lg" variant="outline">See pricing</Button>
+        ) : (
+          <Button href="/solutions" size="lg" variant="outline">Explore solutions</Button>
+        )
+      }
     </Fragment>
     <div class="mx-auto mt-16 max-w-6xl">
       <PlatformDiagram />

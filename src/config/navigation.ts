@@ -13,6 +13,7 @@ export type NavItem =
 
 // Items gated behind a feature flag are filtered out below when the flag is off.
 const developerNav: NavItem[] = features.developers ? [{ label: 'Developers', href: '/developers' }] : [];
+const pricingNav: NavItem[] = features.pricing ? [{ label: 'Pricing', href: '/pricing' }] : [];
 
 export const mainNav: NavItem[] = [
   { label: 'Product', href: '/product' },
@@ -25,7 +26,7 @@ export const mainNav: NavItem[] = [
     })),
   },
   ...developerNav,
-  { label: 'Pricing', href: '/pricing' },
+  ...pricingNav,
   {
     label: 'Company',
     children: [
@@ -45,7 +46,7 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
       { label: 'Overview', href: '/product' },
       { label: 'Capabilities', href: '/product#capabilities' },
       { label: 'Model catalog', href: '/product#models' },
-      { label: 'Pricing', href: '/pricing' },
+      ...(features.pricing ? [{ label: 'Pricing', href: '/pricing' }] : []),
       { label: 'Changelog', href: '/changelog' },
     ],
   },

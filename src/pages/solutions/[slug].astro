@@ -7,7 +7,7 @@ import Eyebrow from '../../components/ui/Eyebrow.astro';
 import IconBadge from '../../components/ui/IconBadge.astro';
 import SectionHeader from '../../components/ui/SectionHeader.astro';
 import { solutions, type Solution } from '../../data/solutions';
-import { product } from '../../config/site';
+import { features, product } from '../../config/site';
 
 export function getStaticPaths() {
   return solutions.map((solution) => ({ params: { slug: solution.slug }, props: { solution } }));
@@ -148,7 +148,7 @@ const Icon = solution.icon;
         </div>
         <ul class="grid gap-3 sm:grid-cols-2">
           {
-            ['Pilot on your own AOIs', 'Pre-configured workflows', 'Accuracy report on your data', 'Integrates with your tools', 'Enterprise security', 'Transparent, area-based pricing'].map((t) => (
+            ['Pilot on your own AOIs', 'Pre-configured workflows', 'Accuracy report on your data', 'Integrates with your tools', 'Enterprise security', features.pricing ? 'Transparent, area-based pricing' : 'Dedicated solutions engineer'].map((t) => (
               <li class="flex items-center gap-2.5 text-foreground">
                 <Check class="size-4.5 shrink-0 text-primary" />
                 {t}
