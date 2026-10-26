@@ -1,28 +1,26 @@
 ---
 import { CircleCheck, LoaderCircle } from '@lucide/astro';
-import { features, site } from '../../config/site';
-import { solutions } from '../../data/solutions';
+import { site } from '../../config/site';
+import { services } from '../../data/services';
 
 interface Props {
-  variant?: 'contact' | 'demo';
+  /** `project` is the scoping-call form; `contact` is the general one. */
+  variant?: 'contact' | 'project';
   class?: string;
 }
 
 const { variant = 'contact', class: className } = Astro.props;
-const isDemo = variant === 'demo';
+const isProject = variant === 'project';
 const uid = `form-${variant}`;
 
 const topics = [
-  { value: 'sales', label: 'Sales & pricing' },
-  { value: 'support', label: 'Product support' },
-  ...(features.developers ? [{ value: 'api', label: 'API access' }] : []),
-  { value: 'custom-model', label: 'Custom models' },
-  { value: 'partnerships', label: 'Partnerships' },
-  { value: 'press', label: 'Press & media' },
+  ...services.map((s) => ({ value: s.slug, label: s.name })),
+  { value: 'partnering', label: 'White-label partnering' },
   { value: 'other', label: 'Something else' },
 ];
 
-const sizes = ['1–50', '51–200', '201–1,000', '1,001–5,000', '5,000+'];
+const orgTypes = ['Utility or municipality', 'GIS consultancy', 'Esri partner', 'Engineering firm', 'Other'];
+const platforms = ['ArcMap and Geometric Network', 'ArcGIS Pro, not yet on Utility Network', 'ArcGIS Utility Network', 'Open source (QGIS, GeoServer, PostGIS)', 'Files and CAD', 'Not sure'];
 
 const input =
   'block w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground shadow-xs transition placeholder:text-muted-foreground/70 focus:border-primary focus:ring-4 focus:ring-primary/15 focus:outline-none user-invalid:border-rose-500';
@@ -34,7 +32,7 @@ const label = 'mb-1.5 block text-sm font-medium text-foreground';
     <input type="hidden" name="form" value={variant} />
     <!-- Honeypot: humans never see or fill this. -->
     <div class="hidden" aria-hidden="true">
-      <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      <label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
     </div>
 
     <div class="grid gap-5 sm:grid-cols-2">
@@ -58,49 +56,39 @@ const label = 'mb-1.5 block text-sm font-medium text-foreground';
         <label for={`${uid}-company`} class={label}>Company</label>
         <input id={`${uid}-company`} name="company" type="text" autocomplete="organization" required class={input} />
       </div>
-      {
-        isDemo ? (
-          <div>
-            <label for={`${uid}-title`} class={label}>Job title</label>
-            <input id={`${uid}-title`} name="jobTitle" type="text" autocomplete="organization-title" class={input} />
-          </div>
-        ) : (
-          <div>
-            <label for={`${uid}-topic`} class={label}>How can we help?</label>
-            <select id={`${uid}-topic`} name="topic" required class={input} data-prefill="topic">
-              {topics.map((t) => (
-                <option value={t.value}>{t.label}</option>
-              ))}
-            </select>
-          </div>
-        )
-      }
+      <div>
+        <label for={`${uid}-topic`} class={label}>{isProject ? 'Service' : 'How can we help?'}</label>
+        <select id={`${uid}-topic`} name="topic" required class={input} data-prefill="topic">
+          {topics.map((t) => (
+            <option value={t.value}>{t.label}</option>
+          ))}
+        </select>
+      </div>
     </div>
 
     {
-      isDemo && (
+      isProject && (
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label for={`${uid}-size`} class={label}>Company size</label>
-            <select id={`${uid}-size`} name="companySize" required class={input}>
+            <label for={`${uid}-org`} class={label}>You are a…</label>
+            <select id={`${uid}-org`} name="organisationType" required class={input} data-prefill="org">
               <option value="" disabled selected>
                 Select…
               </option>
-              {sizes.map((s) => (
-                <option value={s}>{s} employees</option>
+              {orgTypes.map((o) => (
+                <option value={o}>{o}</option>
               ))}
             </select>
           </div>
           <div>
-            <label for={`${uid}-industry`} class={label}>Industry</label>
-            <select id={`${uid}-industry`} name="industry" required class={input} data-prefill="industry">
+            <label for={`${uid}-platform`} class={label}>Current setup</label>
+            <select id={`${uid}-platform`} name="currentSetup" required class={input}>
               <option value="" disabled selected>
                 Select…
               </option>
-              {solutions.map((s) => (
-                <option value={s.slug}>{s.name}</option>
+              {platforms.map((p) => (
+                <option value={p}>{p}</option>
               ))}
-              <option value="other">Other</option>
             </select>
           </div>
         </div>
@@ -109,30 +97,28 @@ const label = 'mb-1.5 block text-sm font-medium text-foreground';
 
     <div>
       <label for={`${uid}-message`} class={label}>
-        {isDemo ? 'What would you like to analyze?' : 'Message'}
-        {isDemo && <span class="font-normal text-muted-foreground"> (optional)</span>}
+        {isProject ? 'Tell us about the project' : 'Message'}
+        {isProject && <span class="font-normal text-muted-foreground"> (optional)</span>}
       </label>
       <textarea
         id={`${uid}-message`}
         name="message"
         rows="4"
-        required={!isDemo}
-        placeholder={isDemo ? 'e.g. Monitor construction across 40 sites in Texas, weekly.' : 'Tell us a little about what you need…'}
+        required={!isProject}
+        placeholder={isProject ? 'e.g. Water network on a geometric network in ArcMap, two service areas, go-live next year.' : 'Tell us a little about what you need…'}
         class={`${input} resize-y`}></textarea>
     </div>
-
-    {isDemo && <input type="hidden" name="plan" data-prefill="plan" />}
 
     <label class="flex items-start gap-3 text-sm text-muted-foreground">
       <input type="checkbox" name="consent" required class="mt-0.5 size-4 shrink-0 rounded border-input accent-[var(--primary)]" />
       <span>
         I agree to the <a href="/privacy" class="font-medium text-foreground underline underline-offset-2 hover:text-primary">privacy policy</a> and to
-        being contacted about {site.name}.
+        being contacted about my enquiry.
       </span>
     </label>
 
     <p data-error hidden role="alert" class="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3.5 py-2.5 text-sm text-rose-700 dark:text-rose-300">
-      Something went wrong. Please try again, or email us at <a href={`mailto:${site.email.sales}`} class="underline">{site.email.sales}</a>.
+      Something went wrong. Please try again, or email us at <a href={`mailto:${site.email.hello}`} class="underline">{site.email.hello}</a>.
     </p>
 
     <button
@@ -140,21 +126,21 @@ const label = 'mb-1.5 block text-sm font-medium text-foreground';
       class="group/submit inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover disabled:cursor-wait disabled:opacity-70"
     >
       <LoaderCircle class="hidden size-4 animate-spin group-disabled/submit:block" />
-      {isDemo ? 'Request my demo' : 'Send message'}
+      {isProject ? 'Request a scoping call' : 'Send message'}
     </button>
-    {isDemo && <p class="text-center text-xs text-muted-foreground">We usually reply within one business day.</p>}
+    {isProject && <p class="text-center text-xs text-muted-foreground">We usually reply within one business day.</p>}
   </form>
 
   <div data-success hidden tabindex="-1" class="py-10 text-center outline-none">
     <span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-soft text-primary-soft-foreground">
       <CircleCheck class="size-7" />
     </span>
-    <h2 class="mt-6 text-2xl font-semibold text-foreground">{isDemo ? 'Your demo request is in' : 'Thanks — message received'}</h2>
+    <h2 class="mt-6 text-2xl font-semibold text-foreground">{isProject ? 'Your request is in' : 'Thanks — message received'}</h2>
     <p class="mx-auto mt-3 max-w-sm text-muted-foreground">
       {
-        isDemo
-          ? 'A solutions engineer will reach out within one business day to schedule a walkthrough on your area of interest.'
-          : 'Our team will get back to you within one business day.'
+        isProject
+          ? 'We’ll reply within one business day with a few times for a call that suit your time zone.'
+          : 'We’ll get back to you within one business day.'
       }
     </p>
   </div>
@@ -167,7 +153,7 @@ const label = 'mb-1.5 block text-sm font-medium text-foreground';
     const error = form.querySelector<HTMLElement>('[data-error]')!;
     const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
 
-    // Prefill selects / hidden fields from the query string, e.g. /contact?topic=api.
+    // Prefill selects from the query string, e.g. /book-a-call?topic=web-gis-apps.
     const params = new URLSearchParams(window.location.search);
     for (const field of form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-prefill]')) {
       const value = params.get(field.dataset.prefill!);
@@ -184,8 +170,14 @@ const label = 'mb-1.5 block text-sm font-medium text-foreground';
         return;
       }
 
-      const data = Object.fromEntries(new FormData(form));
-      if (data.website) return; // Bot filled the honeypot.
+      const data: Record<string, FormDataEntryValue> = Object.fromEntries(new FormData(form));
+      if (data._gotcha) return; // Bot filled the honeypot.
+
+      // Email-friendly metadata (understood by Formspree and similar services):
+      // a readable subject line, and replies go straight to the person who wrote in.
+      const who = `${data.firstName} ${data.lastName}${data.company ? `, ${data.company}` : ''}`;
+      data._subject = data.form === 'project' ? `Scoping call request (${data.topic}): ${who}` : `Website message (${data.topic}): ${who}`;
+      data._replyto = data.email;
 
       submit.disabled = true;
       try {

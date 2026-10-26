@@ -4,13 +4,13 @@ import Logo from '../ui/Logo.astro';
 import Button from '../ui/Button.astro';
 import ThemeMenu from '../ui/ThemeMenu.astro';
 import ThemeSwitcher from '../ui/ThemeSwitcher.astro';
-import { product, site } from '../../config/site';
+import { site } from '../../config/site';
 import { mainNav } from '../../config/navigation';
-import { solutions } from '../../data/solutions';
+import { services } from '../../data/services';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
-const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug}`))?.icon;
+const iconFor = (href: string) => services.find((s) => href.endsWith(`/${s.slug}`))?.icon;
 ---
 
 <header
@@ -55,7 +55,7 @@ const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug
                   data-dropdown-panel
                   class="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-data-open:visible group-data-open:translate-y-0 group-data-open:opacity-100"
                 >
-                  {item.label === 'Solutions' ? (
+                  {item.label === 'Services' ? (
                     <div class="w-[40rem] rounded-2xl border border-border bg-card p-2 shadow-elevated">
                       <ul class="grid grid-cols-2 gap-1">
                         {item.children.map((child) => {
@@ -81,12 +81,12 @@ const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug
                         })}
                       </ul>
                       <a
-                        href="/solutions"
+                        href="/services"
                         class="mt-1 flex items-center justify-between rounded-xl bg-muted px-4 py-3 text-sm font-medium text-foreground transition-colors hover:text-primary"
                       >
                         <span>
-                          Explore all solutions
-                          <span class="ml-2 font-normal text-muted-foreground">See how teams in every industry use {product.shortName}</span>
+                          All services
+                          <span class="ml-2 font-normal text-muted-foreground">From data migration to the apps on top</span>
                         </span>
                         <ArrowRight class="size-4" />
                       </a>
@@ -115,14 +115,8 @@ const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug
 
     <div class="ml-auto flex items-center gap-1.5 sm:gap-2">
       <ThemeMenu />
-      <a
-        href={site.appUrl}
-        class="hidden rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground lg:block"
-      >
-        Sign in
-      </a>
       <div class="hidden sm:block">
-        <Button href="/demo" size="sm">Book a demo</Button>
+        <Button href="/book-a-call" size="sm">Book a scoping call</Button>
       </div>
       <button
         type="button"
@@ -167,14 +161,14 @@ const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug
                     <ChevronDown class="size-4 text-muted-foreground transition-transform group-open/acc:rotate-180" />
                   </summary>
                   <ul class="-mt-1 grid gap-0.5 pb-4 sm:grid-cols-2">
-                    {item.label === 'Solutions' && (
+                    {item.label === 'Services' && (
                       <li class="sm:col-span-2">
                         <a
-                          href="/solutions"
+                          href="/services"
                           class="flex items-center gap-3 rounded-lg px-2 py-2.5 text-[0.95rem] font-medium text-foreground transition-colors hover:bg-muted"
                         >
                           <ArrowRight class="size-4 text-primary" />
-                          All solutions
+                          All services
                         </a>
                       </li>
                     )}
@@ -206,10 +200,7 @@ const iconFor = (href: string) => solutions.find((s) => href.endsWith(`/${s.slug
           <span class="text-sm text-muted-foreground">Appearance</span>
           <ThemeSwitcher />
         </div>
-        <div class="grid gap-3 sm:grid-cols-2">
-          <Button href={site.appUrl} variant="outline" size="lg">Sign in</Button>
-          <Button href="/demo" size="lg">Book a demo</Button>
-        </div>
+        <Button href="/book-a-call" size="lg" class="w-full">Book a scoping call</Button>
       </div>
     </nav>
   </div>

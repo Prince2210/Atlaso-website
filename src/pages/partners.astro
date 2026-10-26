@@ -1,0 +1,91 @@
+---
+import { ArrowRight, BadgeCheck, Clock, FileText, Handshake, ShieldCheck, Users } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import FAQ from '../components/sections/FAQ.astro';
+import Button from '../components/ui/Button.astro';
+import IconBadge from '../components/ui/IconBadge.astro';
+import SectionHeader from '../components/ui/SectionHeader.astro';
+
+const promises = [
+  { icon: Handshake, title: 'Your client stays yours', description: 'We never contact your clients, bid against you or put our name on your deliverables.' },
+  { icon: FileText, title: 'Your standards', description: 'We follow your QA checklists, naming rules, templates and project tools.' },
+  { icon: Clock, title: 'Overnight turnaround', description: 'Work handed over at the end of your day can be done and checked by your next morning.' },
+  { icon: ShieldCheck, title: 'NDA and your access', description: 'A mutual NDA, and we work in your client’s environment with accounts you issue.' },
+  { icon: Users, title: 'The same people each time', description: 'You work with named people who learn your projects, not a rotating pool.' },
+  { icon: BadgeCheck, title: 'Small first', description: 'Start with one work package so you can check our quality before relying on us.' },
+];
+
+const workTypes = [
+  'Geometric Network data clean-up and attribute completion',
+  'Field mapping to Utility Network asset packages',
+  'Data loading runs and error feature resolution',
+  'As-built and redline posting',
+  'Experience Builder widgets and ArcGIS JS apps',
+  'GeoServer, PostGIS and OpenLayers builds',
+];
+
+const faq = [
+  { q: 'How is white-label work priced?', a: 'Per work package at a fixed price, or as reserved monthly capacity if you have a steady pipeline.' },
+  { q: 'Can we interview the people doing the work?', a: 'Yes. You can meet everyone who will work on your projects before the first package starts.' },
+  { q: 'What if a package isn’t up to standard?', a: 'We fix it at no extra cost. Every package is checked against your acceptance criteria before we hand it back.' },
+];
+---
+
+<BaseLayout title="For GIS firms" description="White-label Utility Network migration and web GIS delivery for GIS consultancies and Esri partners.">
+  <PageHero
+    eyebrow="For GIS firms and Esri partners"
+    title="Delivery capacity for your Utility Network projects"
+    description="When your team is full and the backlog of migrations keeps growing, we take on work packages under your name, to your standards, while you keep the client."
+  >
+    <Fragment slot="actions">
+      <Button href="/book-a-call?topic=partnering&org=GIS%20consultancy" size="lg">Talk about partnering <ArrowRight class="size-4" /></Button>
+    </Fragment>
+  </PageHero>
+
+  <section class="py-20 sm:py-28">
+    <div class="container-page">
+      <SectionHeader eyebrow="How it works" title="What you can count on" />
+      <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          promises.map((p) => (
+            <li class="rounded-2xl border border-border bg-card p-7 shadow-soft">
+              <IconBadge>
+                <p.icon />
+              </IconBadge>
+              <h3 class="mt-5 font-semibold text-foreground">{p.title}</h3>
+              <p class="mt-2 leading-relaxed text-muted-foreground">{p.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-y border-border bg-muted/40 py-20 sm:py-28">
+    <div class="container-page grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <SectionHeader
+        align="left"
+        eyebrow="Work packages"
+        title="What partners hand to us"
+        description="Well-defined, checkable pieces of a larger project work best. You keep design decisions and client contact."
+      />
+      <ul class="grid gap-3">
+        {
+          workTypes.map((w) => (
+            <li class="rounded-xl border border-border bg-card px-5 py-4 text-foreground shadow-soft">{w}</li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <FAQ items={faq} />
+
+  <CTASection
+    title="Have a backlog of migrations?"
+    description="Send us one work package. If the quality isn’t what you need, you’ve lost very little."
+    primary={{ label: 'Talk about partnering', href: '/book-a-call?topic=partnering&org=GIS%20consultancy' }}
+  />
+</BaseLayout>

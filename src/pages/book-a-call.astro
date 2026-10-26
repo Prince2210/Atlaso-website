@@ -1,0 +1,46 @@
+---
+import { Check } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LeadForm from '../components/sections/LeadForm.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+
+const expectations = [
+  { title: 'Where your data is today', description: 'Platform, domains, data volume and how it is edited now.' },
+  { title: 'What has to change, and by when', description: 'Deadlines, licences, and the apps or teams that depend on the data.' },
+  { title: 'A written next step', description: 'Within a few days: an assessment proposal with a fixed price, or an honest view that we aren’t the right fit.' },
+];
+---
+
+<BaseLayout title="Book a scoping call" description="A 30-minute call about your utility GIS data, the migration or app you need, and a fixed-price next step.">
+  <section class="relative isolate overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-grid mask-fade-top" aria-hidden="true"></div>
+    <div class="absolute -top-40 left-1/4 -z-10 h-80 w-[40rem] glow" aria-hidden="true"></div>
+    <div class="container-page grid gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:py-24">
+      <div>
+        <Eyebrow class="mb-4">Scoping call</Eyebrow>
+        <h1 class="text-4xl leading-[1.08] font-semibold text-foreground sm:text-5xl">Thirty minutes to a clear plan</h1>
+        <p class="mt-6 max-w-lg text-lg text-muted-foreground">
+          Tell us a little about your network and what you need. We’ll suggest times that overlap with your working day.
+        </p>
+
+        <ul class="mt-10 space-y-6">
+          {
+            expectations.map((e) => (
+              <li class="flex gap-4">
+                <span class="grid size-7 shrink-0 place-items-center rounded-full bg-primary-soft text-primary-soft-foreground">
+                  <Check class="size-4" />
+                </span>
+                <span>
+                  <span class="block font-medium text-foreground">{e.title}</span>
+                  <span class="mt-0.5 block text-muted-foreground">{e.description}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <LeadForm variant="project" class="lg:sticky lg:top-24 lg:self-start" />
+    </div>
+  </section>
+</BaseLayout>

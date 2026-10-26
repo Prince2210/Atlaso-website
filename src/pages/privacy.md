@@ -2,50 +2,42 @@
 layout: ../layouts/LegalLayout.astro
 title: Privacy policy
 description: How Atlaso collects, uses and protects personal information.
-updated: 2026-09-01
+updated: 2026-10-26
 ---
 
-This privacy policy explains how Atlaso Technologies, Inc. (“Atlaso”, “we”, “us”) collects, uses and shares personal information when you visit our website, use our products or otherwise interact with us.
+This privacy policy explains how Atlaso (“Atlaso”, “we”, “us”) collects, uses and shares personal information when you visit this website, contact us or work with us.
 
 ## Information we collect
 
-**Information you provide.** When you request a demo, contact us, create an account or use our services, we collect information such as your name, work email, company, job title and the content of your messages.
+**Information you give us.** When you fill in a form, email us or book a call, we collect your name, work email, company, and anything you tell us about your project.
 
-**Customer content.** When you use our platform, you may upload or define areas of interest, imagery, labels and other data. We process customer content only to provide the services, as described in our customer agreement and data processing addendum.
+**Project data.** Network and asset data you share with us during a project is handled under that project’s contract and NDA, not this policy. See [Data handling](/security) for how we treat it.
 
-**Usage information.** We automatically collect information about how you use our website and services, such as pages visited, features used, device and browser type, and IP address.
+**Website usage.** Our host may log basic technical information, such as IP address and browser type, to keep the website running and secure.
 
 ## How we use information
 
-We use personal information to:
-
-- provide, maintain and improve our services;
-- respond to your requests and provide customer support;
-- send product updates and, where permitted, marketing communications;
-- monitor and protect the security of our services;
-- comply with legal obligations.
-
-We do **not** sell personal information, and we do not use customer content to train shared models without your explicit opt-in.
+We use personal information to reply to your enquiry, scope and deliver projects, send invoices, and meet legal obligations. We do not sell personal information, and we don’t send marketing email unless you ask for it.
 
 ## Sharing
 
-We share personal information with service providers who process it on our behalf under contract, with professional advisers, in connection with a corporate transaction, or where required by law. A current list of sub-processors is available on request.
+We share personal information only with services that help us run the business, such as email, form handling and accounting providers, with professional advisers, or where the law requires it.
 
 ## International transfers
 
-We operate in the United States, the United Kingdom, the European Union and India. Where we transfer personal information internationally, we use appropriate safeguards such as Standard Contractual Clauses.
+We are based in India and work with clients in other countries, so your information may be processed in India and in the countries where our service providers operate.
 
 ## Retention
 
-We keep personal information for as long as needed for the purposes described above, or as required by law. Customer content is deleted in accordance with your agreement after your subscription ends.
+We keep enquiry details for as long as they are useful for the conversation, and project and billing records for as long as the law requires.
 
 ## Your rights
 
-Depending on where you live, you may have the right to access, correct, delete or port your personal information, and to object to or restrict certain processing. To exercise these rights, contact [privacy@atlaso.co.in](mailto:privacy@atlaso.co.in).
+You can ask us to access, correct or delete your personal information, or to stop contacting you, by emailing [privacy@atlaso.co.in](mailto:privacy@atlaso.co.in).
 
 ## Cookies
 
-We use essential cookies to operate our website and, with your consent where required, analytics cookies to understand how it is used. You can control cookies through your browser settings.
+This website does not use advertising or analytics cookies. A small setting may be stored in your browser to remember your light or dark theme.
 
 ## Contact
 

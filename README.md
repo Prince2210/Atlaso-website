@@ -1,6 +1,6 @@
 # Atlaso website
 
-Marketing website for **Atlaso**, a geospatial AI SaaS platform. Built with [Astro](https://astro.build) 7 and [Tailwind CSS](https://tailwindcss.com) 4. Fully static, responsive, with light, dark and system themes.
+Website for **Atlaso**, a utility GIS modernisation services company: Geometric Network to Utility Network migration, GIS data maintenance, web GIS apps (ArcGIS Maps SDK for JavaScript, Experience Builder, OpenLayers, Leaflet) and an open-source option (GeoServer, PostGIS). Built with [Astro](https://astro.build) 7 and [Tailwind CSS](https://tailwindcss.com) 4. Fully static, responsive, with light, dark and system themes.
 
 ## Getting started
 
@@ -17,72 +17,40 @@ npm run preview   # serve the production build
 
 | Route | Description |
 | --- | --- |
-| `/` | Home: hero with product mockup, capabilities, change detection, solutions, API, testimonials |
-| `/product` | Platform overview, capabilities, model catalog, FAQ |
-| `/solutions`, `/solutions/[slug]` | Industry overview + 6 generated industry pages |
-| `/pricing` | Plans with monthly/annual toggle, comparison table, add-ons, FAQ (only built when `features.pricing` is on) |
-| `/developers` | API, SDKs, quickstart, endpoints (only built when `features.developers` is on; see [Feature flags](#feature-flags)) |
-| `/about`, `/careers` | Company, team, values, open roles |
-| `/blog`, `/blog/[id]` | Blog from Markdown content collection |
-| `/changelog` | Release notes |
-| `/contact`, `/demo` | Lead forms |
-| `/security`, `/privacy`, `/terms` | Trust center and legal pages |
+| `/` | Home: hero with network illustration, why now, services, ArcGIS vs open source, process, partners, data handling, FAQ |
+| `/services`, `/services/[slug]` | Services overview + one generated page per service |
+| `/partners` | White-label delivery for GIS consultancies and Esri partners |
+| `/about` | Who we are and how we work |
+| `/contact` | General contact form |
+| `/book-a-call` | Scoping-call request form (prefills from `?topic=<service slug>&org=<organisation type>`) |
+| `/security` | How we handle client network data |
+| `/privacy`, `/terms` | Legal pages |
 | `404` | Not-found page |
 
 ## Changing content
 
-Most placeholder content lives in plain data files, so you rarely need to touch page markup.
-
 | What | Where |
 | --- | --- |
-| Brand name, **product name**, emails, social links, app URL | `src/config/site.ts` |
+| Brand name, legal name, emails, social links, form endpoint | `src/config/site.ts` |
 | Header & footer navigation | `src/config/navigation.ts` |
-| Industries (drives nav, `/solutions` and each `/solutions/[slug]` page) | `src/data/solutions.ts` |
-| Pricing plans, comparison table, pricing FAQ | `src/data/pricing.ts` |
-| Model catalog | `src/data/models.ts` |
-| Team, values, offices, open roles, perks | `src/data/company.ts` |
-| Testimonials and customer logos | `src/data/testimonials.ts` |
-| Changelog entries | `src/data/changelog.ts` |
-| API code samples | `src/data/code.ts` |
-| Blog posts | `src/content/blog/*.md` |
+| Services (drive the nav, `/services`, each `/services/[slug]` page and the form topics) and the engagement process | `src/data/services.ts` |
 | Privacy policy / terms | `src/pages/privacy.md`, `src/pages/terms.md` |
 
-The product name (`product.name` / `product.shortName`) is a placeholder. Changing it in `site.ts` updates every page, code sample and testimonial that mentions it. Blog posts and the legal pages are plain Markdown, so update those by hand.
+The site deliberately has no customer logos, testimonials, case studies or metrics. Add them only once they are real and you have the client's permission to name them.
 
 ### Forms
 
-The contact and demo forms validate in the browser. With `formEndpoint` empty in `src/config/site.ts`, a submit only shows a simulated success message. To receive submissions, set `formEndpoint` to any URL that accepts a JSON `POST`, such as Formspree, Basin or your own API.
+The contact and scoping-call forms validate in the browser. With `formEndpoint` empty in `src/config/site.ts`, a submit only shows a simulated success message. To receive submissions, set `formEndpoint` to any URL that accepts a JSON `POST`, such as Formspree, Basin or your own API.
 
 ### Before launch
 
-- If the domain changes, update `url` in `src/config/site.ts` and the domain in `public/CNAME`. Everything else (canonical URLs, sitemap, `robots.txt`) derives from `url`.
-- Replace `appUrl` and the `social` links (currently `#`) in `src/config/site.ts`.
-- Replace placeholder customers, testimonials, metrics, compliance claims and team members with real ones.
+- Set `formEndpoint` so form submissions reach you.
+- Make sure `hello@atlaso.co.in` and `privacy@atlaso.co.in` exist, or change them in `src/config/site.ts`.
+- Set `legalName` to the registered company name once there is one.
+- Replace the `social` links (currently `#`, which hides them).
+- Check that every practice on `/security` matches what you actually do, since clients may hold you to it.
 - Have counsel review the privacy policy and terms.
 - Add a 1200×630 social image and pass it to `BaseLayout` via the `image` prop.
-
-## Feature flags
-
-Parts of the site that aren't ready to launch are controlled by `features` in `src/config/site.ts`. Change a flag, then commit and push to `main` to redeploy.
-
-| Flag | Default | Controls |
-| --- | --- | --- |
-| `developers` | `false` | The `/developers` page, the home page "For developers" section, the product page "Integrate" row and code samples, header/footer developer links, API/SDK/webhook rows in pricing, the platform diagram, changelog lines, the contact form's "API access" topic, and API wording in product copy |
-| `pricing` | `false` | The `/pricing` page, Pricing links in the header, footer and 404 page, the product page's "See pricing" button (replaced by "Explore solutions"), and the pricing bullet on solution pages |
-
-How it works:
-
-- **Pages:** flagged pages live in `src/feature-pages/` (not `src/pages/`) and are added by the small integration in `astro.config.mjs` only when their flag is on. When off, they aren't built at all, so they 404 and stay out of the sitemap.
-- **Components and data:** import `features` from `src/config/site.ts` and check it, e.g. `{features.developers && (<section>…</section>)}`.
-- **Markdown** (blog posts, legal pages): wrap flagged content in a directive block. It's removed when the flag is off:
-
-  ```md
-  :::feature{name="developers"}
-  Content that only appears when the developers flag is on.
-  :::
-  ```
-
-To add a new flag, add it to `features`, then gate content with it the same way.
 
 ## Deploying
 
@@ -124,16 +92,12 @@ src/
   components/
     layout/      Header (desktop dropdowns + mobile menu), Footer
     sections/    Reusable page sections (PageHero, CTA, FAQ, LeadForm, …)
-    ui/          Primitives (Button, Logo, CodeTabs, theme controls, …)
-    visuals/     Generated SVG visuals (satellite scene, product mockup, before/after slider, diagram)
-  config/        Site, product and navigation config
-  content/blog/  Markdown blog posts
-  data/          Page content as typed data
+    ui/          Primitives (Button, Logo, theme controls, …)
+    visuals/     NetworkMap: an illustrative SVG water network (not real data)
+  config/        Site and navigation config
+  data/          Services and process content as typed data
   layouts/       BaseLayout (SEO + theme), LegalLayout
-  lib/           Blog helpers
   pages/         Routes
   scripts/       Small client-side scripts (dropdowns, theme controls)
   styles/        global.css (Tailwind + tokens)
 ```
-
-The map imagery in the visuals is generated SVG (`SatelliteScene.astro`), not satellite data, so there are no image assets to license. Swap in real screenshots whenever you have them.

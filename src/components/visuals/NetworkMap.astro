@@ -1,0 +1,93 @@
+---
+import { Check } from '@lucide/astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// An illustrative water network: city blocks, mains along the streets, valves and hydrants,
+// with one traced path highlighted. Not real data.
+const blocks = [30, 160, 290, 420].flatMap((x) => [30, 150, 270].map((y) => ({ x, y })));
+const mains = ['M20 140H540', 'M20 260H540', 'M150 20V380', 'M410 20V380', 'M280 140V260'];
+const trace = 'M20 140H280V260H410';
+const laterals = [
+  [60, 140, 60, 122], [100, 140, 100, 158], [200, 140, 200, 122], [240, 140, 240, 158],
+  [330, 260, 330, 242], [370, 260, 370, 278], [470, 140, 470, 122], [500, 260, 500, 278],
+  [150, 60, 132, 60], [150, 320, 168, 320], [410, 90, 428, 90], [410, 330, 392, 330],
+];
+const valves = [
+  { x: 120, y: 140, h: true, on: true },
+  { x: 345, y: 140, h: true, on: false },
+  { x: 280, y: 215, h: false, on: true },
+  { x: 150, y: 300, h: false, on: false },
+  { x: 380, y: 260, h: true, on: true },
+  { x: 410, y: 70, h: false, on: false },
+];
+const hydrants = [
+  { x: 220, y: 140 },
+  { x: 480, y: 260 },
+  { x: 150, y: 210 },
+  { x: 410, y: 200 },
+];
+const steps = ['Source data assessed', 'Asset package mapped', 'Data loaded', 'Subnetworks updated', 'Trace verified'];
+---
+
+<div class:list={['relative overflow-hidden rounded-2xl border border-border bg-[#0b1724] shadow-elevated', className]}>
+  <svg viewBox="0 0 560 400" class="block h-auto w-full" role="img" aria-label="Illustration of a water network with a traced path highlighted">
+    <defs>
+      <filter id="nm-glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="4" result="b"></feGaussianBlur>
+        <feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+      </filter>
+    </defs>
+
+    {blocks.map((b) => <rect x={b.x} y={b.y} width="110" height="100" rx="6" fill="#10283a" />)}
+
+    <g stroke="#3d6a80" stroke-width="1.5" stroke-linecap="round">
+      {laterals.map(([x1, y1, x2, y2]) => <line x1={x1} y1={y1} x2={x2} y2={y2} />)}
+    </g>
+    <g fill="none" stroke="#4f8198" stroke-width="3.5" stroke-linecap="round">
+      {mains.map((d) => <path d={d} />)}
+    </g>
+    <path d={trace} fill="none" stroke="#2dd4bf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#nm-glow)" />
+
+    {
+      valves.map((v) => (
+        <g transform={`translate(${v.x} ${v.y}) rotate(${v.h ? 0 : 90})`}>
+          <path d="M-7 -6L0 0L-7 6ZM7 -6L0 0L7 6Z" fill={v.on ? '#2dd4bf' : '#9fb8c6'} stroke="#0b1724" stroke-width="1.5" />
+        </g>
+      ))
+    }
+    {hydrants.map((h) => <circle cx={h.x} cy={h.y} r="5" fill="#f59e0b" stroke="#0b1724" stroke-width="2" />)}
+    <rect x="12" y="132" width="16" height="16" rx="3" fill="#2dd4bf" stroke="#0b1724" stroke-width="2" />
+  </svg>
+
+  <span class="absolute top-3 left-3 rounded-md bg-slate-950/75 px-2 py-1 font-mono text-[10px] font-medium text-white/85 backdrop-blur">
+    Water distribution · Utility Network
+  </span>
+
+  <div class="absolute right-3 bottom-3 hidden w-56 rounded-xl border border-white/10 bg-slate-950/80 p-3 text-white backdrop-blur sm:block">
+    <p class="text-[11px] font-semibold tracking-wide text-white/60 uppercase">Migration</p>
+    <ul class="mt-2 space-y-1.5">
+      {
+        steps.map((s) => (
+          <li class="flex items-center gap-2 text-xs text-white/90">
+            <span class="grid size-4 shrink-0 place-items-center rounded-full bg-teal-400 text-slate-950">
+              <Check class="size-3" stroke-width={3} />
+            </span>
+            {s}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <ul class="absolute bottom-3 left-3 flex flex-wrap gap-x-3 gap-y-1 rounded-md bg-slate-950/75 px-2.5 py-1.5 text-[10px] text-white/80 backdrop-blur">
+    <li class="flex items-center gap-1.5"><span class="h-0.5 w-3 rounded bg-[#4f8198]"></span>Main</li>
+    <li class="flex items-center gap-1.5"><span class="h-1 w-3 rounded bg-teal-400"></span>Traced</li>
+    <li class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-amber-500"></span>Hydrant</li>
+    <li class="flex items-center gap-1.5"><span class="size-2 rotate-45 bg-[#9fb8c6]"></span>Valve</li>
+  </ul>
+</div>

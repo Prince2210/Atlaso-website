@@ -1,0 +1,65 @@
+---
+import { ArrowRight, Check } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Button from '../../components/ui/Button.astro';
+import IconBadge from '../../components/ui/IconBadge.astro';
+import { services } from '../../data/services';
+---
+
+<BaseLayout title="Services" description="Utility Network migration, GIS data maintenance, web GIS apps and open-source GIS for utilities and GIS firms.">
+  <PageHero
+    eyebrow="Services"
+    title="From the Geometric Network to the apps on top"
+    description="Four services that work alone or together. Each one starts with an assessment and a fixed price."
+  >
+    <Fragment slot="actions">
+      <Button href="/book-a-call" size="lg">Book a scoping call <ArrowRight class="size-4" /></Button>
+    </Fragment>
+  </PageHero>
+
+  <section class="py-20 sm:py-28">
+    <div class="container-page space-y-6">
+      {
+        services.map((s) => (
+          <article class="grid gap-8 rounded-3xl border border-border bg-card p-8 shadow-soft sm:p-10 lg:grid-cols-[1fr_1.2fr] lg:gap-14">
+            <div>
+              <IconBadge>
+                <s.icon />
+              </IconBadge>
+              <h2 class="mt-6 text-2xl font-semibold text-foreground">{s.name}</h2>
+              <p class="mt-3 leading-relaxed text-muted-foreground">{s.hero.description}</p>
+              <div class="mt-6 flex flex-wrap gap-3">
+                <Button href={`/services/${s.slug}`}>
+                  Learn more <ArrowRight class="size-4" />
+                </Button>
+                <Button href={`/book-a-call?topic=${s.slug}`} variant="outline">
+                  Discuss a project
+                </Button>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-foreground">What you get</h3>
+              <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+                {s.deliverables.map((d) => (
+                  <li class="flex items-start gap-2.5 text-[0.95rem] text-foreground">
+                    <Check class="mt-0.5 size-4.5 shrink-0 text-primary" />
+                    {d.title}
+                  </li>
+                ))}
+              </ul>
+              <ul class="mt-8 flex flex-wrap gap-2">
+                {s.stack.map((t) => (
+                  <li class="rounded-md border border-border bg-background px-2 py-1 font-mono text-xs text-muted-foreground">{t}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>

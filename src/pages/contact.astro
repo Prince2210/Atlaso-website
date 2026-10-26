@@ -1,19 +1,12 @@
 ---
-import { Headphones, MapPin, Newspaper, Briefcase } from '@lucide/astro';
+import { Mail, MapPin } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LeadForm from '../components/sections/LeadForm.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
-import { offices } from '../data/company';
-import { features, site } from '../config/site';
-
-const channels = [
-  { icon: Briefcase, title: 'Sales', description: 'Pricing, pilots and enterprise plans.', email: site.email.sales },
-  { icon: Headphones, title: 'Support', description: `Help with your workspace${features.developers ? ' or the API' : ''}.`, email: site.email.support },
-  { icon: Newspaper, title: 'Press', description: 'Media enquiries and brand assets.', email: site.email.press },
-];
+import { site } from '../config/site';
 ---
 
-<BaseLayout title="Contact" description={`Get in touch with the ${site.name} team — sales, support, partnerships and press.`}>
+<BaseLayout title="Contact" description={`Get in touch with ${site.name} about Utility Network migration, GIS data maintenance or web GIS apps.`}>
   <section class="relative isolate overflow-hidden">
     <div class="absolute inset-0 -z-10 bg-grid mask-fade-top" aria-hidden="true"></div>
     <div class="absolute -top-40 left-1/4 -z-10 h-80 w-[40rem] glow" aria-hidden="true"></div>
@@ -22,42 +15,32 @@ const channels = [
         <Eyebrow class="mb-4">Contact</Eyebrow>
         <h1 class="text-4xl leading-[1.08] font-semibold text-foreground sm:text-5xl">Let’s talk</h1>
         <p class="mt-6 max-w-lg text-lg text-muted-foreground">
-          Questions about the platform, pricing or partnering with us? Send a message and the right person will get back to you within
-          one business day.
+          Questions about a migration, an app or working with us as a partner? Send a message and we’ll reply within one business day.
         </p>
 
         <ul class="mt-10 space-y-4">
-          {
-            channels.map((c) => (
-              <li class="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
-                <c.icon class="mt-0.5 size-5 shrink-0 text-primary" />
-                <div>
-                  <h2 class="font-medium text-foreground">{c.title}</h2>
-                  <p class="text-sm text-muted-foreground">{c.description}</p>
-                  <a href={`mailto:${c.email}`} class="mt-1 inline-block text-sm font-medium text-primary hover:underline">
-                    {c.email}
-                  </a>
-                </div>
-              </li>
-            ))
-          }
+          <li class="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
+            <Mail class="mt-0.5 size-5 shrink-0 text-primary" />
+            <div>
+              <h2 class="font-medium text-foreground">Email</h2>
+              <p class="text-sm text-muted-foreground">Projects, partnering and anything else.</p>
+              <a href={`mailto:${site.email.hello}`} class="mt-1 inline-block text-sm font-medium text-primary hover:underline">
+                {site.email.hello}
+              </a>
+            </div>
+          </li>
+          <li class="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
+            <MapPin class="mt-0.5 size-5 shrink-0 text-primary" />
+            <div>
+              <h2 class="font-medium text-foreground">Delhi, India</h2>
+              <p class="text-sm text-muted-foreground">Working with clients in North America, the UK and Australia.</p>
+            </div>
+          </li>
         </ul>
 
-        <h2 class="mt-12 text-sm font-semibold text-foreground">Offices</h2>
-        <ul class="mt-4 grid gap-4 sm:grid-cols-3">
-          {
-            offices.map((o) => (
-              <li class="text-sm">
-                <span class="flex items-center gap-1.5 font-medium text-foreground">
-                  <MapPin class="size-4 text-primary" />
-                  {o.city}
-                </span>
-                <span class="mt-1 block text-muted-foreground">{o.address}</span>
-                <span class="block text-muted-foreground">{o.country}</span>
-              </li>
-            ))
-          }
-        </ul>
+        <p class="mt-10 text-sm text-muted-foreground">
+          Ready to scope a project? <a href="/book-a-call" class="font-medium text-primary hover:underline">Book a scoping call</a> instead.
+        </p>
       </div>
 
       <LeadForm variant="contact" class="lg:sticky lg:top-24 lg:mt-2 lg:self-start" />
